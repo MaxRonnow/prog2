@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/Labyrinth/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Labyrinth" />
+        <module name="BirdMigration" />
+        <module name="Kubb" />
+        <module name="bridges" />
+        <module name="OrbitalMechanics" />
+        <module name="Sudoku" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
