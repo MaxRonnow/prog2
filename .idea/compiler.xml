@@ -9,12 +9,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Labyrinth" />
         <module name="BirdMigration" />
+        <module name="Sudoku" />
+        <module name="Labyrinth" />
         <module name="Kubb" />
         <module name="bridges" />
+        <module name="RallyCars" />
         <module name="OrbitalMechanics" />
-        <module name="Sudoku" />
       </profile>
     </annotationProcessing>
   </component>
