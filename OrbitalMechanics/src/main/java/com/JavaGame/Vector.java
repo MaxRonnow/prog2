@@ -49,4 +49,10 @@ public class Vector {
     public Vector getNormal(){
         return new Vector(-this.y, this.x);
     }
+
+    public Vector flip() { return new Vector(-this.x, -this.y); }
+
+    public String toString(){
+        return String.format("(%.3f; %.3f)", this.x, this.y);
+    }
 }
