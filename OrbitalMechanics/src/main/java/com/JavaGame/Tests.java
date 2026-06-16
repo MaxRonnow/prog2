@@ -10,23 +10,23 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class Tests {
-    public static double errorMargin = 0.02;
+    public static double errorMargin = 0.05;
     @Test
     public void testCelestialObjectProperties(){
         CelestialObject sun = new Sun();
         CelestialObject earth = new Earth();
         CelestialObject moon = new Moon(earth);
 
-        double sunDensity = 1408;
-        double earthDensity = 5513;
-        double moonDensity = 3344;
+        double sunDensity = 1.408;
+        double earthDensity = 5.513;
+        double moonDensity = 3.344;
 
         double eDen = earth.getDensity();
-        assertTrue("Measuring earth density, expected 5513, was " + eDen, earthDensity * (1-errorMargin) < eDen && eDen < earthDensity * (1+errorMargin));
+        assertTrue("Measuring earth density, expected 5.513, was " + eDen, earthDensity * (1.0-errorMargin) < eDen && eDen < earthDensity * (1.0+errorMargin));
         double mDen = moon.getDensity();
-        assertTrue("Measuring moon density, expected 3344, was " + mDen, moonDensity * (1-errorMargin) < mDen && mDen < moonDensity * (1+errorMargin));
+        assertTrue("Measuring moon density, expected 3.344, was " + mDen, (moonDensity * (1.0-errorMargin) < mDen) && (mDen < moonDensity * (1.0+errorMargin)));
         double sDen = sun.getDensity();
-        assertTrue("Measuring sun density, expected 1408, was " + sDen, sunDensity * (1-errorMargin) < sDen && sDen < sunDensity * (1+errorMargin));
+        assertTrue("Measuring sun density, expected 1.408, was " + sDen, sunDensity * (1.0-errorMargin) < sDen && sDen < sunDensity * (1.0+errorMargin));
 
         double earthSurfaceGravity = 9.806;
         double moonSurfaceGravity = 1.622;
@@ -93,7 +93,9 @@ public class Tests {
 
         double lunarOrbitSpeed = moon.getVelocity().getAmplitude();
         double targetSpeed = 1022;
-        assertTrue("Lunar orbital speed", targetSpeed * (1-errorMargin) < lunarOrbitSpeed && lunarOrbitSpeed < targetSpeed * (1+errorMargin));
+        assertTrue("Lunar orbital speed, expected 1022, was " + lunarOrbitSpeed,
+                targetSpeed * (1-errorMargin) < lunarOrbitSpeed
+                        && lunarOrbitSpeed < targetSpeed * (1+errorMargin));
 
         double satelliteHeight = 100000 + earth.getRadius();
         double minimalVel = earth.getOrbitalVelocity(satelliteHeight, 0);

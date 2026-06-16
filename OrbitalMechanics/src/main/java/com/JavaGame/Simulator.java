@@ -22,7 +22,7 @@ public class Simulator {
     }
 
     public void setCircularOrbits(){
-        for (CelestialObject obj : bodies){
+        for (CelestialObject obj : bodies) {
             obj.setCircularOrbitVelocity();
         }
     }

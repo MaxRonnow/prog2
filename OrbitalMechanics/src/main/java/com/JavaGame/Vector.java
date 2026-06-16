@@ -55,4 +55,12 @@ public class Vector {
     public String toString(){
         return String.format("(%.3f; %.3f)", this.x, this.y);
     }
+
+    public double getX(){
+        return this.x;
+    }
+
+    public double getY(){
+        return this.y;
+    }
 }

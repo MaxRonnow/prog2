@@ -10,6 +10,7 @@ public class CelestialObject {
     private Vector position;
     private Vector velocity;
     public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
+    public static final double AU = 1.496e11;  // Astronomical Unit (m)
     public static final double sphereVolMultiplier = (4.0/3.0)*Math.PI;
     // private final float angularVelocity;
     private CelestialObject parent;
@@ -55,7 +56,6 @@ public class CelestialObject {
     public double getGravityForce(CelestialObject other){
         // returns value in Newton
         return G * this.mass * other.mass / pow(this.position.getDistance(other.position), 2);
-        // TODO: function to apply force to velocity in direction of other object
     }
 
     public double getSurfaceGravity(){
@@ -64,9 +64,8 @@ public class CelestialObject {
     }
 
     public double getDensity(){
-        // return value in kg/m^3 (kilograms per cubic meter). Divide by 1000 to get g/cm^3.
-
-        return this.mass / (sphereVolMultiplier * pow(this.radius, 3));
+        // return value in kg/m^3 (kilograms per cubic meter). Divide by 1000 to get g/cm^3 (normal density units).
+        return (this.mass / (sphereVolMultiplier * pow(this.radius, 3))) / 1000.0;
     }
 
     public void updatePosition(int timestep){
@@ -79,17 +78,22 @@ public class CelestialObject {
         return this.position;
     }
 
+    public void addParentVelocity(){
+        if (this.getParent() != null) {
+            this.velocity = this.velocity.add(this.parent.velocity);
+            // assuming only one level of parent, and grandfather doesn't move
+        }
+    }
+
     public void setCircularOrbitVelocity() {
         if (this.affectedByGravity() && this.getParent() != null){
             // calculate a normal velocity based on position and gravitational force between this and parent object
             Vector toParent = this.position.to(this.parent.position);
             Vector normal = toParent.getNormal().normalize();
-            // TODO: maybe only calculate with parent mass
             // https://en.wikipedia.org/wiki/Circular_orbit
             this.velocity = normal.mult(sqrt((G * (this.mass + parent.mass)) / toParent.getAmplitude()));
-            // add the velocity to the velocity of the parent
-            this.velocity = this.velocity.add(this.parent.velocity);
-            // assuming only one level of parent, and grandfather doesn't move
+            // include parent's velocity so orbit is correct in world coordinates (not only relative to parent)
+            this.addParentVelocity();
         }
     }
 
@@ -99,6 +103,14 @@ public class CelestialObject {
 
     public Vector getVelocity(){
         return this.velocity;
+    }
+
+    public double getMass() {
+        return this.mass;
+    }
+
+    public void addVelocity(Vector dv) {
+        this.velocity = this.velocity.add(dv);
     }
 
     public void update(int timestep){
