@@ -1,5 +1,7 @@
 package com.JavaGame;
 
+import java.util.List;
+
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
@@ -16,6 +18,7 @@ public class CelestialObject {
     private CelestialObject parent;
     private final String name;
     private double initOrbitalDistance;
+    private boolean affectedByGravity = true;
 
     public CelestialObject(double mass, double radius, Vector position, String name){ // mass (kg), radius (m)
         // mass in kg, radius in m, position in m
@@ -72,7 +75,8 @@ public class CelestialObject {
         this.position = this.position.add(this.velocity.mult(timestep));
     }
 
-    public boolean affectedByGravity() { return true; }
+    public boolean getAffectedByGravity() { return this.affectedByGravity; }
+    public void setAffectedByGravity(boolean b){this.affectedByGravity = b;}
 
     public Vector getPosition() {
         return this.position;
@@ -86,7 +90,7 @@ public class CelestialObject {
     }
 
     public void setCircularOrbitVelocity() {
-        if (this.affectedByGravity() && this.getParent() != null){
+        if (this.getAffectedByGravity() && this.getParent() != null){
             // calculate a normal velocity based on position and gravitational force between this and parent object
             Vector toParent = this.position.to(this.parent.position);
             Vector normal = toParent.getNormal().normalize();
@@ -115,7 +119,7 @@ public class CelestialObject {
 
     public void update(int timestep){
         // assuming timestep is in seconds
-        if (!this.affectedByGravity()){
+        if (!this.getAffectedByGravity()){
             // position I guess can be updated if velocity is set manually
             this.updatePosition(timestep);
             return;
@@ -134,6 +138,33 @@ public class CelestialObject {
             // System.out.println("Current velocity change..." + velocityChange);
 
             currObj = currObj.getParent();
+        }
+        this.velocity = this.velocity.add(velocityChange);
+        this.updatePosition(timestep);
+    }
+
+    public void update(int timestep, List<CelestialObject> bodies){
+        // assuming timestep is in seconds
+        if (!this.getAffectedByGravity()){
+            // position I guess can be updated if velocity is set manually
+            this.updatePosition(timestep);
+            return;
+        }
+        // 1. calculate the cumulative forces of gravity to all objects
+        // 2. update the position
+        Vector velocityChange = new Vector();
+
+        for (CelestialObject obj : bodies){
+            if (obj.equals(this)){
+                continue;
+            }
+            double force = this.getGravityForce(obj);
+            Vector direction = this.position.to(obj.getPosition()).normalize();
+            // System.out.println("Direction of gravity: " + direction.toString());
+            double directionMult = force * timestep / this.mass;
+            // System.out.println("Directionmult: " + directionMult);
+            velocityChange = velocityChange.add(direction.mult(directionMult));
+            // System.out.println("Current velocity change..." + velocityChange);
         }
         this.velocity = this.velocity.add(velocityChange);
         this.updatePosition(timestep);
@@ -170,5 +201,9 @@ public class CelestialObject {
 
     public double getRadius() {
         return this.radius;
+    }
+
+    public void setPosition(Vector vector) {
+        this.position = vector;
     }
 }

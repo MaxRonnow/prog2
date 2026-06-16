@@ -12,14 +12,14 @@ public class Main extends JFrame {
     private static final double SCALE = 1e6;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
-    private static final int SECS_PER_FRAME = 3600;  // seconds of simulation per frame,
+    private static final int SECS_PER_FRAME = 3600 * 24;  // seconds of simulation per frame,
     // upper recommended limit 3600 (1h per frame), otherwise orbits become wonky
     private static final boolean EARTH_MOON_SYSTEM = false;  // false --> solar system (no moons)
 
     static class SimulationPanel extends JPanel {
         private final java.util.List<CelestialObject> bodies;
         private final CelestialObject centerBody; // optional center (e.g., Earth)
-        private static final double metersPerPixel = EARTH_MOON_SYSTEM ? 2e6 : 6e8; // tune to zoom
+        private static final double metersPerPixel = EARTH_MOON_SYSTEM ? 2e6 : 2e9; // tune to zoom
         private final int trailLength = 400; // keep last 100 positions
         private final java.util.Map<CelestialObject, java.util.ArrayDeque<Vector>> trails = new java.util.LinkedHashMap<>();
 
@@ -38,11 +38,15 @@ public class Main extends JFrame {
         private int wx(double worldX){
             double cx = getWidth()/2.0;
             double centerWorldX = centerBody.getPosition().getX();
+            centerWorldX = 0;
+            // tmp override, center is always 0
             return (int)Math.round(cx + (worldX - centerWorldX)/metersPerPixel);
         }
         private int wy(double worldY){
             double cy = getHeight()/2.0;
             double centerWorldY = centerBody.getPosition().getY();
+            centerWorldY = 0;
+            // tmp override, center is always 0
             return (int)Math.round(cy - (worldY - centerWorldY)/metersPerPixel); // invert Y
         }
 
@@ -121,7 +125,7 @@ public class Main extends JFrame {
 
             new Timer(40, e -> {         // ~25 FPS
                 // update model (run on EDT for simplicity — thread-safety)
-                for (CelestialObject b : bodies) b.update(SECS_PER_FRAME);
+                for (CelestialObject b : bodies) b.update(SECS_PER_FRAME, bodies);
                 panel.pushTrailPositions();
                 panel.repaint();
             }).start();
@@ -131,6 +135,35 @@ public class Main extends JFrame {
     private static List<CelestialObject> getCelestialObjects() {
         List<CelestialObject> bodies = new ArrayList<>();
 
+        // TODO: remove temp override
+        Sun sun1 = new Sun();
+        Sun sun2 = new Sun();
+        sun2.setParent(sun1);
+        sun2.setPosition(new Vector(219098450e3, -49098450e3));
+        sun2.setAffectedByGravity(true);
+        sun1.setAffectedByGravity(true);
+        sun2.setCircularOrbitVelocity();
+        bodies.add(sun1);
+        bodies.add(sun2);
+
+        Sun sun3 = new Sun();
+        sun3.setParent(sun1);
+        sun3.setPosition(new Vector(-179098450e3, 0));
+        sun3.setAffectedByGravity(true);
+        sun3.setCircularOrbitVelocity();
+        bodies.add(sun3);
+
+        Mercury merc = new Mercury(sun1);
+        // merc.setParent(sun1);
+        merc.setCircularOrbitVelocity();
+        bodies.add(merc);
+
+        Mars mars = new Mars(sun2);
+        mars.setCircularOrbitVelocity();
+        bodies.add(mars);
+
+        return bodies;
+/*
         if (EARTH_MOON_SYSTEM){
             Earth earth = new Earth();
             Moon moon = new Moon(earth);
@@ -158,5 +191,7 @@ public class Main extends JFrame {
 
         }
         return bodies;
+
+ */
     }
 }

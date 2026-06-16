@@ -9,8 +9,6 @@ public class Sun extends CelestialObject {
         double radius = 695700e3;
 
         super(mass, radius, new Vector(), "Sun");  // position 0.0 by default
+        setAffectedByGravity(false);
     }
-
-    @Override
-    public boolean affectedByGravity() { return false; }
 }
