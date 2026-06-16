@@ -15,7 +15,7 @@ public interface Tile {
 
     List<Tile> getNeighbors();
 
-    List<Boolean> getClockwiseWalls();  // starting from 12 o'clock
+    boolean[] getClockwiseWalls();  // starting from 12 o'clock
 
     void removeWall(int index);  // starting from 12 o'clock
 
@@ -23,7 +23,7 @@ public interface Tile {
         return getTileType().getClockWiseDirections();
     }
 
-    Double[][] getCorners();
+    double[][] getCorners();
 
     TileType getTileType();
 

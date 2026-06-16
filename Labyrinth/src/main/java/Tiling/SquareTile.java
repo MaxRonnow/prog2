@@ -9,12 +9,12 @@ public class SquareTile implements Tile {
     private final int row;
     private final int col;
     public static final double IN_RADIUS = 20;
-    private List<Boolean> walls;
+    private boolean[] walls;
 
     public SquareTile(final int row, final int col){
         this.row = row;
         this.col = col;
-        this.walls = List.of(new Boolean[]{true, true, true, true});
+        this.walls = new boolean[]{true, true, true, true};
     }
 
 
@@ -59,20 +59,21 @@ public class SquareTile implements Tile {
     }
 
     @Override
-    public List<Boolean> getClockwiseWalls() {
+    public boolean[] getClockwiseWalls() {
         return this.walls;
     }
 
     @Override
     public void removeWall(int index) {
-        this.walls.set(index, false);
+        // TODO: assert index exists
+        this.walls[index] = false;
     }
 
     @Override
-    public Double[][] getCorners() {
+    public double[][] getCorners() {
         double topLeftX = this.getPosX();
         double topLeftY = this.getPosY();
-        return new Double[][]{
+        return new double[][]{
                 {topLeftX, topLeftY},
                 {topLeftX + this.getWidth(), topLeftY},
                 {topLeftX + this.getWidth(), topLeftY + this.getHeight()},

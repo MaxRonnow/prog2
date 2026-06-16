@@ -3,7 +3,7 @@ import Tiling.Tile;
 import Tiling.TileType;
 
 public class Labyrinth {
-    private Tile[][] tileMap;
+    private final Tile[][] tileMap;
     private final int rows;
     private final int cols;
 
@@ -11,6 +11,10 @@ public class Labyrinth {
         this.rows = rows;
         this.cols = cols;
         this.tileMap = generateMap(tileType);
+    }
+
+    public Tile[][] getTileMap(){
+        return this.tileMap;
     }
 
     public int getRows(){
@@ -38,7 +42,7 @@ public class Labyrinth {
         return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
     }
 
-    private Tile getTileAt(int row, int col){
+    public Tile getTileAt(int row, int col){
         assert isValidCoord(row, col);
         return this.tileMap[row][col];
     }
@@ -56,11 +60,18 @@ public class Labyrinth {
         return null;
     }
 
-    private void removeWall(Tile currTile, int directionIndex){
+    public void removeWall(Tile currTile, int directionIndex){
         currTile.removeWall(directionIndex);
         // remove the opposite wall on the neighbor
         Tile neighbor = getNeighbor(currTile, directionIndex);
-        int edges = currTile.getTileType().getNrEdges();
-        neighbor.removeWall(currTile.getTileType().getOppositeEdge(directionIndex));
+        // int edges = currTile.getTileType().getNrEdges();
+        if (neighbor != null){
+            neighbor.removeWall(currTile.getTileType().getOppositeEdge(directionIndex, currTile.getRow()));
+        }
+    }
+
+    public void createMaze() {
+        // TODO: Do the algorithm
+
     }
 }
