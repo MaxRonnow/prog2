@@ -1,13 +1,11 @@
 package com.JavaGame;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class TerminalUI {
 
     Kubb game;
     GameBoard gameBoard;
-    int counter = 0;
 
     public TerminalUI(Kubb game) {
         this.game = game;
