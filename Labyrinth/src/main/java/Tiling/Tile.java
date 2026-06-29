@@ -1,5 +1,6 @@
 package Tiling;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Tile {
@@ -13,7 +14,21 @@ public interface Tile {
     double getPosX();
     double getPosY();
 
-    List<Tile> getNeighbors();
+    default List<Tile> getNeighbors(Tile[][] allTiles, int rows, int cols){
+        int[][] dirs = this.getTileType().getClockWiseDirections();
+        List<Tile> neighbors = new ArrayList<>();
+        for (int[] dir : dirs){
+            int newRow = this.getRow() + dir[0];
+            int newCol = this.getCol() + dir[1];
+            if (0 <= newRow && newRow < rows && 0 <= newCol && newCol < cols){
+                Tile neighborTile = allTiles[newRow][newCol];
+                if (neighborTile != null && neighborTile.isValidCoordinate(rows, cols)){
+                    neighbors.add(neighborTile);
+                }
+            }
+        }
+        return neighbors;
+    }
 
     boolean[] getClockwiseWalls();  // starting from 12 o'clock
 
@@ -31,4 +46,7 @@ public interface Tile {
         return 0 <= this.getRow() && this.getRow() < rows
                 && 0 <= this.getCol() && this.getCol() < cols;
     }
+
+    boolean isVisited();
+    void setVisited(boolean b);
 }

@@ -32,7 +32,11 @@ public class Race {
         this.vehicles = vehicles;
     }
 
-    private void start(){
+    public List<Vehicle> getVehicles(){
+        return this.vehicles;
+    }
+
+    public void start(){
         // sets the starting road as the current road for all vehicles
         for (Vehicle veh : this.vehicles){
             veh.setCurrentRoad(this.startRoad);
@@ -55,7 +59,7 @@ public class Race {
         return atleastOneCarRunning;
     }
 
-    public void run(){
+    private void run(){
         assert startRoad != null;
         assert vehicles != null;
         start();
@@ -74,6 +78,11 @@ public class Race {
         for (Vehicle veh : vehicles){
             System.out.println(veh + " finnished the race in " + veh.getDoneInTurns() + " turns");
         }
+    }
+
+    public void update(){
+        forward(timestep);
+        timestep++;
     }
 
     private void printCourse(Vehicle veh) {
@@ -98,5 +107,9 @@ public class Race {
         }
 
         System.out.println(courseString);
+    }
+
+    public Road getStartRoad(){
+        return this.startRoad;
     }
 }

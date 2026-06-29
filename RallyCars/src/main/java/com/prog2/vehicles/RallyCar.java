@@ -2,9 +2,12 @@ package com.prog2.vehicles;
 
 import com.prog2.roads.Road;
 
+import java.awt.*;
+
 public class RallyCar extends Vehicle {
     public RallyCar() {
         super("RallyCar");
+        setColor(new Color(0, 0, 255));
     }
 
     @Override

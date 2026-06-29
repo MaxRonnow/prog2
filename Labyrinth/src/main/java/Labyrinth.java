@@ -72,6 +72,7 @@ public class Labyrinth {
 
     public void createMaze() {
         // TODO: Do the algorithm
+        // https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
     }
 }

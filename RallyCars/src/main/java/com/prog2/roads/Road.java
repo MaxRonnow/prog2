@@ -1,6 +1,8 @@
 package com.prog2.roads;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public enum Road {
 
@@ -38,13 +40,13 @@ public enum Road {
         return length;
     }
 
-    public boolean getTurnAt(final int distance){
+    public Turn getTurnAt(final int distance){
         for (Turn t : turns){
             if (distance >= t.getAtRoadDistance() && distance < t.getAtRoadDistance() + t.getDistanceRequired()){
-                return true;
+                return t;
             }
         }
-        return false;
+        return null;
     }
 
     public String asciiPrint(int vehOnRoadDistance) {
@@ -58,7 +60,7 @@ public enum Road {
             currDist = 10 * i;
             if (currDist <= vehOnRoadDistance && vehOnRoadDistance < currDist + 10 && vehOnRoadDistance >= 0) {
                 roadStr.append(">");
-            } else if (this.getTurnAt(currDist)){
+            } else if (this.getTurnAt(currDist) != null){
                 roadStr.append("~");
             } else {
                 roadStr.append("-");
@@ -74,5 +76,14 @@ public enum Road {
 
     public String getName(){
         return this.name;
+    }
+
+    public Color getColor(){
+        return switch (this){
+            case Road.ASPHALT -> new Color(0, 0, 0);
+            case Road.DIRT -> new Color(20, 20, 20);
+            case Road.GRAVEL -> new Color(40, 40, 40);
+            default -> new Color(200, 200, 200);
+        };
     }
 }

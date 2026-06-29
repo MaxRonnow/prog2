@@ -2,6 +2,8 @@ package com.prog2.vehicles;
 
 import com.prog2.roads.Road;
 
+import java.awt.*;
+
 public class SportsCar extends Vehicle {
     // breaks down every 10 turns in snow and takes 2 turns to repair
 
@@ -12,6 +14,7 @@ public class SportsCar extends Vehicle {
         super("SportsCar");
         this.turnsInSnow = 0;
         this.breakDownTurns = 0;
+        setColor(new Color(255, 0,0));
     }
 
     @Override

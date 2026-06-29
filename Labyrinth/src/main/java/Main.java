@@ -14,8 +14,8 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Labyrinth lab = new Labyrinth(ROWS, COLS, TileType.SQUARE);
-            // lab.removeWall(lab.getTileAt(0, 0), 1);
-            // lab.removeWall(lab.getTileAt(0, 1), 2);
+            lab.removeWall(lab.getTileAt(0, 0), 1);
+            lab.removeWall(lab.getTileAt(0, 1), 2);
             lab.createMaze();
 
             JFrame frame = new JFrame("Labyrinth");

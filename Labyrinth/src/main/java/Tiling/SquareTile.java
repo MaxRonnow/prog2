@@ -1,5 +1,6 @@
 package Tiling;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SquareTile implements Tile {
@@ -10,11 +11,13 @@ public class SquareTile implements Tile {
     private final int col;
     public static final double IN_RADIUS = 20;
     private boolean[] walls;
+    private boolean isVisited;
 
     public SquareTile(final int row, final int col){
         this.row = row;
         this.col = col;
         this.walls = new boolean[]{true, true, true, true};
+        this.isVisited = false;
     }
 
 
@@ -54,11 +57,6 @@ public class SquareTile implements Tile {
     }
 
     @Override
-    public List<Tile> getNeighbors() {
-        return List.of();
-    }
-
-    @Override
     public boolean[] getClockwiseWalls() {
         return this.walls;
     }
@@ -84,5 +82,15 @@ public class SquareTile implements Tile {
     @Override
     public TileType getTileType() {
         return TileType.SQUARE;
+    }
+
+    @Override
+    public boolean isVisited() {
+        return this.isVisited;
+    }
+
+    @Override
+    public void setVisited(boolean b) {
+        this.isVisited = b;
     }
 }

@@ -2,6 +2,7 @@ package com.prog2.vehicles;
 
 import com.prog2.roads.Road;
 
+import java.awt.*;
 import java.util.List;
 
 public class Buggy extends Vehicle {
@@ -16,6 +17,7 @@ public class Buggy extends Vehicle {
         this.refueledLastTurn = false;
         this.isPostRefueling = false;
         this.postRefuelingTurns = 0;
+        this.setColor(new Color(15, 90, 90));
     }
 
     @Override

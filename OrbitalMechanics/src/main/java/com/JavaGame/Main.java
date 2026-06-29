@@ -134,7 +134,7 @@ public class Main extends JFrame {
 
     private static List<CelestialObject> getCelestialObjects() {
         List<CelestialObject> bodies = new ArrayList<>();
-
+        /*
         // TODO: remove temp override
         Sun sun1 = new Sun();
         Sun sun2 = new Sun();
@@ -163,7 +163,9 @@ public class Main extends JFrame {
         bodies.add(mars);
 
         return bodies;
-/*
+
+         */
+
         if (EARTH_MOON_SYSTEM){
             Earth earth = new Earth();
             Moon moon = new Moon(earth);
@@ -192,6 +194,6 @@ public class Main extends JFrame {
         }
         return bodies;
 
- */
+
     }
 }

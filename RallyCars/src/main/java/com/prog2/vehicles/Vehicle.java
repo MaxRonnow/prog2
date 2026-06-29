@@ -2,6 +2,8 @@ package com.prog2.vehicles;
 
 import com.prog2.roads.Road;
 
+import java.awt.*;
+
 public abstract class Vehicle {
     private int totalDistanceTravelled;// km
     private int roadDistanceTravelled;
@@ -11,6 +13,7 @@ public abstract class Vehicle {
     private int currentSpeed;
     private final String name;
     private int doneInTurns;
+    private Color color;
 
     public Vehicle(String name){
         this.totalDistanceTravelled = 0;
@@ -18,8 +21,11 @@ public abstract class Vehicle {
         this.fuelLeft = this.getTankSize();
         this.name = name;
         this.doneInTurns = 9999999;
+        this.color = new Color(0, 0, 0);
     }
 
+    public Color getColor(){ return this.color; }
+    public void setColor(Color color){ this.color = color; }
     public abstract int getTurnSpeed(Road road);
     public abstract int getSurfaceSpeed(Road road);
     public abstract int getFuelConsumption();
@@ -100,7 +106,7 @@ public abstract class Vehicle {
             }
         }
         // 4. Check if in a turn
-        if (this.currentRoad.getTurnAt(this.getRoadDistanceTravelled())){
+        if (this.currentRoad.getTurnAt(this.getRoadDistanceTravelled()) != null){
             // System.out.println(this + " is in a turn");
             this.currentSpeed = this.getTurnSpeed(this.currentRoad);
         }
