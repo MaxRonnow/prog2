@@ -4,22 +4,27 @@ import com.JavaGame.Planets.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements KeyListener {
 
     private static final double SCALE = 1e6;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
-    private static final int SECS_PER_FRAME = 3600 * 24;  // seconds of simulation per frame,
-    // upper recommended limit 3600 (1h per frame), otherwise orbits become wonky
-    private static final boolean EARTH_MOON_SYSTEM = false;  // false --> solar system (no moons)
+
+    private static final int DELAY = 10;  // milliseconds between frames
+    
+    private SimulationPanel simulationPanel;
 
     static class SimulationPanel extends JPanel {
         private final java.util.List<CelestialObject> bodies;
         private final CelestialObject centerBody; // optional center (e.g., Earth)
-        private static final double metersPerPixel = EARTH_MOON_SYSTEM ? 2e6 : 2e9; // tune to zoom
+        private double metersPerPixel = 1e9; // tune to zoom
+        private int SECS_PER_FRAME = 3600;  // seconds of simulation per frame,
+        // upper recommended limit 3600 (1h per frame), otherwise orbits become wonky
         private final int trailLength = 400; // keep last 100 positions
         private final java.util.Map<CelestialObject, java.util.ArrayDeque<Vector>> trails = new java.util.LinkedHashMap<>();
 
@@ -48,6 +53,26 @@ public class Main extends JFrame {
             centerWorldY = 0;
             // tmp override, center is always 0
             return (int)Math.round(cy - (worldY - centerWorldY)/metersPerPixel); // invert Y
+        }
+
+        public void updateZoom(boolean in){
+            if (in) {
+                metersPerPixel *= 0.8;
+            } else {
+                metersPerPixel /= 0.8;
+            }
+        }
+
+        public void updateSimSpeed(double mult){
+            SECS_PER_FRAME = (int) (SECS_PER_FRAME * mult);
+        }
+        
+        public double getMetersPerPixel() {
+            return metersPerPixel;
+        }
+        
+        public void setMetersPerPixel(double value) {
+            metersPerPixel = value;
         }
 
         // call this once per frame after updating physics to capture the current position
@@ -97,6 +122,14 @@ public class Main extends JFrame {
                 g.fillOval(x - rpx, y - rpx, rpx*2, rpx*2);
             }
         }
+
+        public int getSECS_PER_FRAME() {
+            return SECS_PER_FRAME;
+        }
+
+        public void setSECS_PER_FRAME(int SECS_PER_FRAME) {
+            this.SECS_PER_FRAME = SECS_PER_FRAME;
+        }
     }
 
     public static Color getPlanetColor(String name){
@@ -109,91 +142,58 @@ public class Main extends JFrame {
         };
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e){
+        char key = e.getKeyChar();
+        if (key == 'z' || key == 'Z'){
+            simulationPanel.updateZoom(true);
+        } else if (key == 'x' || key == 'X') {
+            simulationPanel.updateZoom(false);
+        } else if (key == 'v' || key == 'V'){
+            simulationPanel.updateSimSpeed(0.5);
+        } else if (key == 'b' || key == 'B'){
+            simulationPanel.updateSimSpeed(2);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+
     static void main() {
         SwingUtilities.invokeLater(() -> {
-            List<CelestialObject> bodies = getCelestialObjects();
+            List<CelestialObject> bodies = CelestialSystems.TRIPLE_SUN_SYSTEM();
 
-            JFrame frame = new JFrame("Orbital sim");
+            Main frame = new Main();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             SimulationPanel panel = new SimulationPanel(bodies, bodies.getFirst());
+            frame.simulationPanel = panel;
 
             frame.add(panel);
             frame.setSize(WIDTH, HEIGHT);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+            frame.addKeyListener(frame);
+            frame.setFocusable(true);
 
-            new Timer(40, e -> {         // ~25 FPS
+            System.out.println("Simulation speed: " + ((1000 / DELAY) * panel.getSECS_PER_FRAME()) / 3600 + " hours simulated per second");
+
+            new Timer(DELAY, e -> {
                 // update model (run on EDT for simplicity — thread-safety)
-                for (CelestialObject b : bodies) b.update(SECS_PER_FRAME, bodies);
+                for (CelestialObject b : bodies) b.update(panel.getSECS_PER_FRAME(), bodies);
                 panel.pushTrailPositions();
                 panel.repaint();
+
+
             }).start();
         });
-    }
-
-    private static List<CelestialObject> getCelestialObjects() {
-        List<CelestialObject> bodies = new ArrayList<>();
-        /*
-        // TODO: remove temp override
-        Sun sun1 = new Sun();
-        Sun sun2 = new Sun();
-        sun2.setParent(sun1);
-        sun2.setPosition(new Vector(219098450e3, -49098450e3));
-        sun2.setAffectedByGravity(true);
-        sun1.setAffectedByGravity(true);
-        sun2.setCircularOrbitVelocity();
-        bodies.add(sun1);
-        bodies.add(sun2);
-
-        Sun sun3 = new Sun();
-        sun3.setParent(sun1);
-        sun3.setPosition(new Vector(-179098450e3, 0));
-        sun3.setAffectedByGravity(true);
-        sun3.setCircularOrbitVelocity();
-        bodies.add(sun3);
-
-        Mercury merc = new Mercury(sun1);
-        // merc.setParent(sun1);
-        merc.setCircularOrbitVelocity();
-        bodies.add(merc);
-
-        Mars mars = new Mars(sun2);
-        mars.setCircularOrbitVelocity();
-        bodies.add(mars);
-
-        return bodies;
-
-         */
-
-        if (EARTH_MOON_SYSTEM){
-            Earth earth = new Earth();
-            Moon moon = new Moon(earth);
-            moon.setCircularOrbitVelocity();
-            bodies.add(earth);
-            bodies.add(moon);
-        } else {
-            Sun sun = new Sun();
-            Earth earth = new Earth(sun);
-            earth.setCircularOrbitVelocity();
-            bodies.add(sun);
-            bodies.add(earth);
-            // add other planets here :)
-            Mercury merc = new Mercury(sun);
-            merc.setCircularOrbitVelocity();
-            bodies.add(merc);
-
-            Venus ven = new Venus(sun);
-            ven.setCircularOrbitVelocity();
-            bodies.add(ven);
-
-            Mars mars = new Mars(sun);
-            mars.setCircularOrbitVelocity();
-            bodies.add(mars);
-
-        }
-        return bodies;
-
-
     }
 }
