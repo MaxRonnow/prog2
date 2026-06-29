@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bridge {
-    private Island island1;
-    private Island island2;
-    private float length;
+    private final Island island1;
+    private final Island island2;
+    private final float length;
 
     public Bridge(Island island1, Island island2) {
         this.island1 = island1;
@@ -23,12 +23,9 @@ public class Bridge {
         return length;
     }
 
-    public void setLength(float length) {
-        this.length = length;
-    }
-
     public String toString() {
         return "Island1: (x: " + island1.getX() + " y: " + island1.getY() + ") Island2: (x: " + island2.getX() + " y: " + island2.getY() + ")";
     }
+
 
 }

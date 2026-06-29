@@ -1,18 +1,10 @@
 public class Island {
-    private float x;
-    private float y;
+    private final float x;
+    private final float y;
 
 
     public Island(float x, float y) {
         this.x = x;
-        this.y = y;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
         this.y = y;
     }
 
