@@ -1,9 +1,16 @@
 package com.JavaGame;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
+public class Vector implements VectorInterface{
 
-public class Vector {
+    /*
+    THIS CLASS SHOULD HAVE THE METHODS IMPLEMENTED
+    GO TO EACH "TO-DO" AND IMPLEMENT ACCORDING TO INSTRUCTIONS
+
+    The class represents a 2D vector in the real coordinate system as x and y doubles.
+    This is an immutable class, meaning it could be converted to a "record" class easily.
+    Therefore, any calculation that returns a Vector should either return "this" or a new Vector
+     */
+
     private final double x;
     private final double y;
 
@@ -17,40 +24,49 @@ public class Vector {
         this.y = y;
     }
 
-    public double getDistance(final Vector other){
-        // hypothenuse
-        return sqrt(pow(this.x - other.x, 2) + pow(this.y - other.y, 2));
+    public double getDistance(final VectorInterface other){
+        // TODO: implement the distance between two vectors (the hypotenuse)
+        return 0;
     }
 
-    public Vector add(final Vector other){
-        return new Vector(this.x + other.x, this.y + other.y);
+    public Vector vectorSum(final VectorInterface other){
+        // TODO: sum of two vectors
+        return new Vector();
     }
 
-    public Vector to(final Vector other){
-        return new Vector(other.x - this.x, other.y - this.y);
+    public Vector vectorTo(final VectorInterface other){
+        // TODO: what is the vector that connects this to the other vector?
+        return new Vector();
     }
 
-    public Vector mult(final double z){
+    public Vector scalarMult(final double z){
         return new Vector(this.x * z, this.y * z);
     }
 
     public Vector normalize(){
-        return this.mult(1 / getAmplitude());
+        // TODO: return a vector in the same direction as this but with length 1
+        return new Vector();
     }
 
     public double getAmplitude(){
-        return sqrt(pow(this.x, 2) + pow(this.y, 2));
+        // TODO: what is the length of the vector?
+        return 0;
     }
 
-    public double dot(final Vector other){
-        return this.x * other.x + this.y * other.y;
+    public double dotProduct(final VectorInterface other){
+        // TODO: get the dot product of two vectors
+        return 0;
     }
 
     public Vector getNormal(){
-        return new Vector(-this.y, this.x);
+        // TODO: Return a new vector of this that is rotated 90 degrees counter-clockwise
+        return new Vector();
     }
 
-    public Vector flip() { return new Vector(-this.x, -this.y); }
+    public Vector flip() {
+        // TODO: return a new vector of this that is rotated 180 degrees
+        return new Vector(-this.x, -this.y);
+    }
 
     public String toString(){
         return String.format("(%.3f; %.3f)", this.x, this.y);

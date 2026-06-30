@@ -2,94 +2,91 @@ package com.JavaGame;
 
 import java.awt.*;
 import java.util.List;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
-public class CelestialObject implements CelestialObjectInterface{
-
-    // region Class Fields & Constructor
+public class ImplementedCelestialObject implements CelestialObjectInterface{
     private final double mass; // in kg (use double to hold large astronomical masses)
     private final double radius; // in m
-    private Vector position;  // A 2D vector representation of the position of this object relative to "world origin" (center of screen), in metres
-    private Vector velocity;  // 2D vector representation of direction of travel (m) per second
+    private ImplementedVector position;  // A 2D vector representation of the position of this object relative to "world origin" (center of screen), in metres
+    private ImplementedVector velocity;  // 2D vector representation of direction of travel (m) per second
     public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
     public static final double AU = 1.496e11;  // Astronomical Unit (m)
+    public static final double sphereVolMultiplier = (4.0/3.0)*Math.PI;
 
     private final String name;  // only used for printing
     private boolean affectedByGravity = true;  // for skipping gravity calculations for mostly static objects (magnitudes more massive objects)
 
-    public CelestialObject(double mass, double radius, Vector position, String name){ // mass (kg), radius (m)
+    public ImplementedCelestialObject(double mass, double radius, VectorInterface position, String name){ // mass (kg), radius (m)
         // Constructor: mass in kg, radius in m, position in m
         this.mass = mass;
         this.radius = radius;
-        this.position = position;
+        this.position = (ImplementedVector) position;
         this.name = name;
-        this.velocity = new Vector();
+        this.velocity = new ImplementedVector();
     }
 
-    // endregion
-
-    // region IMPLEMENT THESE
-
     public double getGravityForce(final CelestialObjectInterface other){
-        // TODO: get the force of gravity between this and the other object
-        // return value is in Newton
-        return 0;
+        // returns value in Newton
+        return G * this.mass * other.getMass() / pow(this.position.getDistance(other.getPosition()), 2);
     }
 
     public double getSurfaceGravity(){
-        // TODO: get the surface acceleration of this object (assuming a perfect sphere)
         // return value in m/s^2
-        return 0;
+        return G * this.mass / pow(this.radius, 2);
     }
 
     public double getDensity(){
-        // TODO: get the density of this object assuming a perfect sphere
-        // return value in g/cm^3 (normal density units).
-        return 0;
+        // return value in kg/m^3 (kilograms per cubic meter). Divide by 1000 to get g/cm^3 (normal density units).
+        return (this.mass / this.getVolume()) / 1000.0;
     }
 
     @Override
     public double getVolume() {
-        // TODO: return the volume of this object assuming a perfect sphere
-        return 0;
+        return (sphereVolMultiplier * pow(this.radius, 3));
     }
-
-    public double getCircularSpeed(double otherMass, double distanceToOther){
-        // TODO: get the amplitude of the velocity required to orbit another object in a perfect circle
-        return 0;
-    }
-
-    public double getEscapeSpeed(double distance){
-        // TODO: get the minimum velocity required to escape the gravitational influence of this object,
-        //  at the provided distance (to the center of mass)
-        return 0;
-    }
-
-    public double getOrbitalSpeed(double currDistance, double targetHeight){
-        // TODO: calculate the speed required to orbit this object between the currDistance to center of mass,
-        //  and the targetHeight above this object (assuming perfect sphere)
-        //  - return 0 if the orbit is impossible
-
-        return 0;
-    }
-
-    // endregion
-
-    // region DO NOT EDIT
 
     public void updatePosition(int timestep){
         // Based on the velocity and timestep
         this.position = this.position.vectorSum(this.velocity.scalarMult(timestep));
     }
 
+    public double getCircularSpeed(double otherMass, double distanceToOther){
+        return sqrt((G * (this.mass + otherMass)) / distanceToOther);
+    }
+
+    public double getEscapeSpeed(double distance){
+        return sqrt((2*G*this.mass) / distance);
+    }
+
+    public double getOrbitalSpeed(double currDistance, double targetHeight){
+        // assumes distance to body center
+        // targetHeight is above the planet surface
+        // Check that position is above body surface
+        if (currDistance <= this.radius){
+            System.out.println("Distance is inside the body radius");
+            return 0;
+        }
+
+        double grav = G * this.mass;
+        double periapsis = this.radius + targetHeight;
+
+        return sqrt(
+                grav * (2 / currDistance - 2 / (currDistance + periapsis))
+        );
+    }
+
+    // region DO NOT EDIT
+
     public void setCircularOrbitVelocity(final CelestialObjectInterface parentObject) {
         // Sets the velocity to orbit the other object in a perfect circle counterclockwise,
         // then adds the other objects own velocity, such that this stays in a relative circular orbit
         if (this.getAffectedByGravity() && parentObject != null){
             // calculate a normal velocity based on position and gravitational force between this and parent object
-            Vector toParent = this.position.vectorTo(parentObject.getPosition());
-            Vector normal = toParent.getNormal().normalize();
+            VectorInterface toParent = this.getPosition().vectorTo(parentObject.getPosition());
+            VectorInterface normal = toParent.getNormal().normalize();
             // https://en.wikipedia.org/wiki/Circular_orbit
-            this.velocity = normal.scalarMult(getCircularSpeed(parentObject.getMass(), toParent.getAmplitude()));
+            this.velocity = (ImplementedVector) normal.scalarMult(this.getCircularSpeed(parentObject.getMass(), toParent.getAmplitude()));
             // include parent's velocity so orbit is correct in world coordinates (not only relative to parent)
             this.velocity = this.velocity.vectorSum(parentObject.getVelocity());
         }
@@ -104,21 +101,21 @@ public class CelestialObject implements CelestialObjectInterface{
         }
         // 1. calculate the cumulative forces of gravity to all objects
         // 2. update the position
-        Vector velocityChange = new Vector();
+        ImplementedVector velocityChange = new ImplementedVector();
 
         for (CelestialObjectInterface obj : bodies){
             if (obj.equals(this)){
                 continue;
             }
             double force = this.getGravityForce(obj);
-            Vector direction = this.position.vectorTo(obj.getPosition()).normalize();
+            VectorInterface direction = this.position.vectorTo(obj.getPosition()).normalize();
             // System.out.println("Direction of gravity: " + direction.toString());
             double directionMult = force * timestep / this.mass;
             // System.out.println("Directionmult: " + directionMult);
-            velocityChange = velocityChange.vectorSum(direction.scalarMult(directionMult));
+            velocityChange = (ImplementedVector) velocityChange.vectorSum(direction.scalarMult(directionMult));
             // System.out.println("Current velocity change..." + velocityChange);
         }
-        this.velocity = this.velocity.vectorSum(velocityChange);
+        this.velocity = (ImplementedVector) this.velocity.vectorSum(velocityChange);
         this.updatePosition(timestep);
     }
 
@@ -129,11 +126,11 @@ public class CelestialObject implements CelestialObjectInterface{
     public boolean getAffectedByGravity() { return this.affectedByGravity; }
     public void setAffectedByGravity(boolean b){this.affectedByGravity = b;}
 
-    public Vector getPosition() {
+    public VectorInterface getPosition() {
         return this.position;
     }
 
-    public Vector getVelocity(){
+    public VectorInterface getVelocity(){
         return this.velocity;
     }
 
@@ -158,8 +155,8 @@ public class CelestialObject implements CelestialObjectInterface{
         return this.radius;
     }
 
-    public void setPosition(Vector vector) {
-        this.position = vector;
+    public void setPosition(VectorInterface vector) {
+        this.position = (ImplementedVector) vector;
     }
 
     // endregion

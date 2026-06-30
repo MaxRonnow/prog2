@@ -1,7 +1,6 @@
-package com.JavaGame.Planets;
+package com.JavaGame;
 
-import com.JavaGame.CelestialObject;
-import com.JavaGame.Vector;
+import java.awt.*;
 
 public class Venus extends CelestialObject {
     public static final double mass = 4.867e24;
@@ -17,12 +16,8 @@ public class Venus extends CelestialObject {
         super(mass, radius, position, name);
     }
 
-    public Venus(Vector position, CelestialObject parent) {
-        super(mass, radius, position, parent, name);
+    @Override
+    public Color getColor() {
+        return new Color(154, 154, 79);
     }
-
-    public Venus(CelestialObject parent) {
-        super(mass, radius, new Vector(semiMajorAxis, 0), parent, name);
-    }
-
 }

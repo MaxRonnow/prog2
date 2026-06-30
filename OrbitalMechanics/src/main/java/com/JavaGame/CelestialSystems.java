@@ -1,77 +1,106 @@
 package com.JavaGame;
 
-import com.JavaGame.Planets.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CelestialSystems {
 
-    public static List<CelestialObject> EARTH_MOON_SYSTEM() {
-        List<CelestialObject> bodies = new ArrayList<>();
+    public static List<CelestialObjectInterface> EARTH_MOON_SYSTEM() {
+        CelestialSystems systems = new CelestialSystems();
+        List<CelestialObjectInterface> bodies = new ArrayList<>();
 
-        Earth earth = new Earth();
-        Moon moon = new Moon(earth);
-        moon.setCircularOrbitVelocity();
+        CelestialObjectInterface earth = systems.getEarth();
+        CelestialObjectInterface moon = systems.getMoon();
+        moon.setCircularOrbitVelocity(earth);
         bodies.add(earth);
         bodies.add(moon);
 
         return bodies;
     }
 
-    public static List<CelestialObject> INNER_SOLAR_SYSTEM() {
-        List<CelestialObject> bodies = new ArrayList<>();
+    public static List<CelestialObjectInterface> INNER_SOLAR_SYSTEM() {
+        CelestialSystems systems = new CelestialSystems();
+        List<CelestialObjectInterface> bodies = new ArrayList<>();
 
-        Sun sun = new Sun();
-        Earth earth = new Earth(sun);
-        earth.setCircularOrbitVelocity();
+        CelestialObjectInterface sun = systems.getSun();
+        CelestialObjectInterface earth = systems.getEarth();
+        earth.setCircularOrbitVelocity(sun);
         bodies.add(sun);
         bodies.add(earth);
         // add other planets here :)
-        Mercury merc = new Mercury(sun);
-        merc.setCircularOrbitVelocity();
+        CelestialObjectInterface merc = systems.getMercury();
+        merc.setCircularOrbitVelocity(sun);
         bodies.add(merc);
 
-        Venus ven = new Venus(sun);
-        ven.setCircularOrbitVelocity();
+        CelestialObjectInterface ven = systems.getVenus();
+        ven.setCircularOrbitVelocity(sun);
         bodies.add(ven);
 
-        Mars mars = new Mars(sun);
-        mars.setCircularOrbitVelocity();
+        CelestialObjectInterface mars = systems.getMars();
+        mars.setCircularOrbitVelocity(sun);
         bodies.add(mars);
 
         return bodies;
     }
 
-    public static List<CelestialObject> TRIPLE_SUN_SYSTEM(){
-        List<CelestialObject> bodies = new ArrayList<>();
+    public static List<CelestialObjectInterface> TRIPLE_SUN_SYSTEM(){
+        CelestialSystems systems = new CelestialSystems();
+        List<CelestialObjectInterface> bodies = new ArrayList<>();
 
-        Sun sun1 = new Sun();
-        Sun sun2 = new Sun();
-        sun2.setParent(sun1);
-        sun2.setPosition(new Vector(219098450e3, -49098450e3));
+        // TODO: change to CelestialObject here
+        ImplementedCelestialObject sun1 = (ImplementedCelestialObject) systems.getSun();
+        ImplementedCelestialObject sun2 = (ImplementedCelestialObject) systems.getSun();
+        sun2.setPosition(systems.getVector(219098450e3, -49098450e3));
         sun2.setAffectedByGravity(true);
         sun1.setAffectedByGravity(true);
-        sun2.setCircularOrbitVelocity();
+        sun2.setCircularOrbitVelocity(sun1);
+
         bodies.add(sun1);
         bodies.add(sun2);
 
-        Sun sun3 = new Sun();
-        sun3.setParent(sun1);
-        sun3.setPosition(new Vector(-179098450e3, 0));
+        ImplementedCelestialObject sun3 = (ImplementedCelestialObject) systems.getSun();
+        sun3.setPosition(systems.getVector(-179098450e3, 0));
         sun3.setAffectedByGravity(true);
-        sun3.setCircularOrbitVelocity();
+        sun3.setCircularOrbitVelocity(sun1);
         bodies.add(sun3);
 
-        Mercury merc = new Mercury(sun1);
-        // merc.setParent(sun1);
-        merc.setCircularOrbitVelocity();
+        CelestialObjectInterface merc = systems.getMercury();
+        merc.setCircularOrbitVelocity(sun1);
         bodies.add(merc);
 
-        Mars mars = new Mars(sun2);
-        mars.setCircularOrbitVelocity();
+        CelestialObjectInterface mars = systems.getMars();
+        mars.setCircularOrbitVelocity(sun2);
         bodies.add(mars);
 
         return bodies;
+    }
+
+    // TODO change these once testing is complete
+    private CelestialObjectInterface getEarth(){
+        return new ImplementedEarth();
+    }
+
+    private CelestialObjectInterface getMoon(){
+        return new ImplementedMoon();
+    }
+
+    private CelestialObjectInterface getSun(){
+        return new ImplementedSun();
+    }
+
+    private CelestialObjectInterface getMercury(){
+        return new ImplementedMercury();
+    }
+
+    private CelestialObjectInterface getVenus(){
+        return new ImplementedVenus();
+    }
+
+    private CelestialObjectInterface getMars(){
+        return new ImplementedMars();
+    }
+
+    private VectorInterface getVector(double x, double y){
+        return new ImplementedVector(x, y);
     }
 }

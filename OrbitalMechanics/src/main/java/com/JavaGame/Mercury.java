@@ -1,7 +1,6 @@
-package com.JavaGame.Planets;
+package com.JavaGame;
 
-import com.JavaGame.CelestialObject;
-import com.JavaGame.Vector;
+import java.awt.*;
 
 public class Mercury extends CelestialObject {
     public static final double mercuryMass = 3.3011e23;
@@ -17,12 +16,8 @@ public class Mercury extends CelestialObject {
         super(mercuryMass, mercuryRadius, position, name);
     }
 
-    public Mercury(Vector position, CelestialObject parent) {
-        super(mercuryMass, mercuryRadius, position, parent, name);
+    @Override
+    public Color getColor() {
+        return new Color(181, 130, 130);
     }
-
-    public Mercury(CelestialObject parent) {
-        super(mercuryMass, mercuryRadius, new Vector(semiMajorAxis, 0), parent, name);
-    }
-
 }
