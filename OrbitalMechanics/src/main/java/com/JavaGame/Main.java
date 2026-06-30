@@ -165,8 +165,8 @@ public class Main extends JFrame implements KeyListener {
 
     static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            // TODO: Once students implement Vector methods and CelestialObject, update CelestialSystems.java
-            // to return instances of the student-implemented classes instead of Implemented* classes
+            // Once students implement Vector methods and CelestialObject methods,
+            // this will automatically work since CelestialSystems uses the helper methods
             List<CelestialObjectInterface> bodies = CelestialSystems.TRIPLE_SUN_SYSTEM();
 
             Main frame = new Main();

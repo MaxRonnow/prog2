@@ -3,15 +3,17 @@ package com.JavaGame;
 import java.awt.*;
 
 public class Earth extends CelestialObject {
-    public static final double earthMass = 5.972e24;
-    public static final double earthRadius = 6371e3;
+    // TODO:
+    //  - Lookup the mass, radius of the earth and the semi-major axis distance around the sun
+    //  - Three significant digits is enough
+    //  - In the Earth constructor, create a CelestialObject (using the super() method) with the above information,
+    //  and the name "Earth"
+
 
     public Earth() {
-        super(earthMass, earthRadius, new Vector(149098450e3, 0), "Earth");
-    }
-
-    public Earth(Vector position) {
-        super(earthMass, earthRadius, position, "Earth");
+        // TODO: fill in the information in the super() call.
+        // mass, radius, position, name
+        super(0, 0, null, null);
     }
 
     @Override

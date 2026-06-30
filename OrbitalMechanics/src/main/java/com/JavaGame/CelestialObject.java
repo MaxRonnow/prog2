@@ -98,7 +98,7 @@ public class CelestialObject implements CelestialObjectInterface{
     public void update(int timestep, List<CelestialObjectInterface> bodies){
         // assuming timestep is in seconds
         if (!this.getAffectedByGravity()){
-            // position I guess can be updated if velocity is set manually
+            // Update position based on manually set velocity
             this.updatePosition(timestep);
             return;
         }
@@ -127,6 +127,7 @@ public class CelestialObject implements CelestialObjectInterface{
     // region GETTERS-SETTERS
 
     public boolean getAffectedByGravity() { return this.affectedByGravity; }
+
     public void setAffectedByGravity(boolean b){this.affectedByGravity = b;}
 
     public Vector getPosition() {
@@ -158,8 +159,8 @@ public class CelestialObject implements CelestialObjectInterface{
         return this.radius;
     }
 
-    public void setPosition(Vector vector) {
-        this.position = vector;
+    public void setPosition(VectorInterface vector) {
+        this.position = (Vector) vector;
     }
 
     // endregion

@@ -37,6 +37,13 @@ public class TestOrbitalMechanics {
     }
 
     @Test
+    public void testEarth(){
+        assertTrue(5.9e24 < earth.getMass() && earth.getMass() < 6.0e24);
+        assertTrue(6300e3 < earth.getRadius() && earth.getRadius() < 6371e3);
+        assertTrue(140098450e3 < earth.getPosition().getAmplitude() && earth.getPosition().getAmplitude() < 154098450e3);
+    }
+
+    @Test
     public void testVolume(){
         double moonVolume = 2.1958e10 * 1e9;
         double cMV = moon.getVolume();

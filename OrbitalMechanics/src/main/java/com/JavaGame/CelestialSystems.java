@@ -47,9 +47,8 @@ public class CelestialSystems {
         CelestialSystems systems = new CelestialSystems();
         List<CelestialObjectInterface> bodies = new ArrayList<>();
 
-        // TODO: change to CelestialObject here
-        ImplementedCelestialObject sun1 = (ImplementedCelestialObject) systems.getSun();
-        ImplementedCelestialObject sun2 = (ImplementedCelestialObject) systems.getSun();
+        CelestialObjectInterface sun1 = systems.getSun();
+        CelestialObjectInterface sun2 = systems.getSun();
         sun2.setPosition(systems.getVector(219098450e3, -49098450e3));
         sun2.setAffectedByGravity(true);
         sun1.setAffectedByGravity(true);
@@ -58,7 +57,7 @@ public class CelestialSystems {
         bodies.add(sun1);
         bodies.add(sun2);
 
-        ImplementedCelestialObject sun3 = (ImplementedCelestialObject) systems.getSun();
+        CelestialObjectInterface sun3 = systems.getSun();
         sun3.setPosition(systems.getVector(-179098450e3, 0));
         sun3.setAffectedByGravity(true);
         sun3.setCircularOrbitVelocity(sun1);
@@ -75,32 +74,32 @@ public class CelestialSystems {
         return bodies;
     }
 
-    // TODO change these once testing is complete
+    // Helper methods - update these with student implementations once they're complete
     private CelestialObjectInterface getEarth(){
-        return new ImplementedEarth();
+        return new Earth();
     }
 
     private CelestialObjectInterface getMoon(){
-        return new ImplementedMoon();
+        return new Moon();
     }
 
     private CelestialObjectInterface getSun(){
-        return new ImplementedSun();
+        return new Sun();
     }
 
     private CelestialObjectInterface getMercury(){
-        return new ImplementedMercury();
+        return new Mercury();
     }
 
     private CelestialObjectInterface getVenus(){
-        return new ImplementedVenus();
+        return new Venus();
     }
 
     private CelestialObjectInterface getMars(){
-        return new ImplementedMars();
+        return new Mars();
     }
 
     private VectorInterface getVector(double x, double y){
-        return new ImplementedVector(x, y);
+        return new Vector(x, y);
     }
 }

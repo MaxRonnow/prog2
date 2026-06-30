@@ -20,4 +20,7 @@ public interface CelestialObjectInterface {
     double getRadius();
     double getMass();
     Color getColor();
+    void setAffectedByGravity(boolean b);
+    boolean getAffectedByGravity();
+    void setPosition(VectorInterface vector);
 }

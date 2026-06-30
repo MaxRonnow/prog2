@@ -64,7 +64,6 @@ public class Vector implements VectorInterface{
     }
 
     public Vector flip() {
-        // TODO: return a new vector of this that is rotated 180 degrees
         return new Vector(-this.x, -this.y);
     }
 
