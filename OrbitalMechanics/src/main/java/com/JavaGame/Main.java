@@ -60,6 +60,7 @@ public class Main extends JFrame implements KeyListener {
 
         public void updateSimSpeed(double mult){
             SECS_PER_FRAME = (int) (SECS_PER_FRAME * mult);
+            System.out.println("Simulation speed: " + ((1000 / DELAY) * SECS_PER_FRAME) / 3600 + " hours simulated per second");
         }
 
         // call this once per frame after updating physics to capture the current position

@@ -18,17 +18,8 @@ public enum Planets {
     //  - Do not edit the other methods
 
     public double getMass(){
+        // TODO: change these values:
 
-        return switch (this){
-            case MERCURY -> 3.2837e23;
-            case VENUS -> 4.8675e24;
-            case EARTH -> 5.972e24;
-            case MOON -> 7.346e22;
-            case MARS -> 6.4171e23;
-            case SUN -> 1.988e30;
-        };
-
-        /*
         return switch (this){
             case MERCURY -> 0.0;
             case VENUS -> 0.0;
@@ -37,21 +28,12 @@ public enum Planets {
             case MARS -> 0.0;
             case SUN -> 0.0;
         };
-
-         */
     }
 
     public double getRadius(){
 
-        return switch (this){
-            case MERCURY -> 2439.7e3;
-            case VENUS -> 6051.8e3;
-            case EARTH -> 6371e3;
-            case MOON -> 1737e3;
-            case MARS -> 3389.5e3;
-            case SUN -> 695700e3;
-        };
-        /*
+        // TODO: change these values
+
         return switch (this){
             case MERCURY -> 0.0;
             case VENUS -> 0.0;
@@ -60,22 +42,13 @@ public enum Planets {
             case MARS -> 0.0;
             case SUN -> 0.0;
         };
-         */
+
     }
 
     public double getSemiMajorAxis(){
 
-        // TODO: the semi-major axis of the moon is relative to earth
+        // TODO: change these values, the semi-major axis of the moon is relative to earth
 
-        return switch (this){
-            case EARTH -> 149098450e3;
-            case MERCURY -> 57909050e3;
-            case VENUS -> 108208000e3;
-            case MOON -> 3.84e8;
-            case MARS -> 227909200e3;
-            case SUN -> 0.0;
-        };
-        /*
         return switch (this){
             case EARTH -> 0.0;
             case MERCURY -> 0.0;
@@ -85,7 +58,6 @@ public enum Planets {
             case SUN -> 0.0;
         };
 
-         */
     }
 
     // region DO NOT EDIT

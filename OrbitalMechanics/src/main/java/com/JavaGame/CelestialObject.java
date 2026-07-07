@@ -9,8 +9,7 @@ import static java.lang.Math.sqrt;
 public class CelestialObject implements CelestialObjectInterface{
 
     // TODO: set the gravitational constant G here
-    // public static final double G = 0.0; // gravitational constant (m^3 kg^-1 s^-2)
-    public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
+    public static final double G = 0.0; // gravitational constant (m^3 kg^-1 s^-2)
 
     // region Class Fields & Constructor
     private final double mass; // in kg (use double to hold large astronomical masses)
@@ -37,42 +36,36 @@ public class CelestialObject implements CelestialObjectInterface{
     public double getGravityForce(final CelestialObjectInterface other){
         // TODO: get the force of gravity between this and the other object
         // return value is in Newton
-        // return 0;
-        return (G * this.getMass() * other.getMass()) / pow(this.position.getDistance(other.getPosition()), 2);
+        return 0;
     }
 
     public double getSurfaceGravity(){
         // TODO: get the surface acceleration of this object (assuming a perfect sphere)
         // return value in m/s^2
-        // return 0;
-        return G * this.mass / pow(this.radius, 2);
+        return 0;
     }
 
     public double getDensity(){
         // TODO: get the density of this object assuming a perfect sphere
         // return value in g/cm^3 (normal density units).
-        // return 0;
-        return (this.mass / this.getVolume()) / 1000.0;
+        return 0;
     }
 
     @Override
     public double getVolume() {
         // TODO: return the volume of this object assuming a perfect sphere
-        // return 0;
-        return ((4.0/3.0)*Math.PI * pow(this.radius, 3));
+        return 0;
     }
 
     public double getCircularSpeed(double otherMass, double distanceToOther){
         // TODO: get the amplitude of the velocity required to orbit another object in a perfect circle
-        // return 0;
-        return sqrt((G * (this.mass + otherMass)) / distanceToOther);
+        return 0;
     }
 
     public double getEscapeSpeed(double distance){
         // TODO: get the minimum velocity required to escape the gravitational influence of this object,
         //  at the provided distance (to the center of mass)
-        // return 0;
-        return sqrt((2*G*this.mass) / distance);
+        return 0;
     }
 
     public double getOrbitalSpeed(double currDistance, double targetHeight){
@@ -80,23 +73,7 @@ public class CelestialObject implements CelestialObjectInterface{
         //  and the targetHeight above this object (assuming perfect sphere)
         //  - return 0 if the orbit is impossible
 
-        // return 0;
-
-        // assumes distance to body center
-        // targetHeight is above the planet surface
-        // Check that position is above body surface
-        if (currDistance <= this.radius){
-            System.out.println("Distance is inside the body radius");
-            return 0;
-        }
-
-        double grav = G * this.mass;
-        double periapsis = this.radius + targetHeight;
-
-        return sqrt(
-                grav * (2 / currDistance - 2 / (currDistance + periapsis))
-        );
-
+        return 0;
     }
 
     // endregion
