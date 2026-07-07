@@ -24,9 +24,12 @@ public class Race {
     }
 
     public Race(Road startRoad, List<Vehicle> vehicles) {
+        assert startRoad != null;
+        assert vehicles != null;
+
         this.timestep = 0;
         this.startRoad = startRoad;
-        this.vehicles = vehicles;
+        this.vehicles = List.copyOf(vehicles);
     }
 
     public List<Vehicle> getVehicles(){

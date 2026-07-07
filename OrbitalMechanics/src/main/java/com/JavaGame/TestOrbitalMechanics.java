@@ -22,9 +22,9 @@ public class TestOrbitalMechanics {
 
     @BeforeEach
     public void createPlanets(){
-        sun = new Sun();
-        earth = new Earth();
-        moon = new Moon();
+        sun = Planets.SUN.getNew();
+        earth = Planets.EARTH.getNew();
+        moon = Planets.MOON.getNew();
 
         a = new Vector(3,4);
         b = new Vector(1,2);

@@ -3,15 +3,23 @@ package com.JavaGame;
 import java.awt.*;
 import java.util.List;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class CelestialObject implements CelestialObjectInterface{
+
+    // TODO: set the gravitational constant G here, and the astronomical unit (in meters)
+    // public static final double G = 0.0; // gravitational constant (m^3 kg^-1 s^-2)
+    public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
+    // public static final double AU = 0.0; // Astronomical Unit (m)
+    public static final double AU = 1.496e11;  // Astronomical Unit (m)
+
 
     // region Class Fields & Constructor
     private final double mass; // in kg (use double to hold large astronomical masses)
     private final double radius; // in m
     private Vector position;  // A 2D vector representation of the position of this object relative to "world origin" (center of screen), in metres
     private Vector velocity;  // 2D vector representation of direction of travel (m) per second
-    public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
-    public static final double AU = 1.496e11;  // Astronomical Unit (m)
 
     private final String name;  // only used for printing
     private boolean affectedByGravity = true;  // for skipping gravity calculations for mostly static objects (magnitudes more massive objects)
@@ -27,41 +35,47 @@ public class CelestialObject implements CelestialObjectInterface{
 
     // endregion
 
-    // region IMPLEMENT THESE
+    // region TODO: IMPLEMENT THESE
 
     public double getGravityForce(final CelestialObjectInterface other){
         // TODO: get the force of gravity between this and the other object
         // return value is in Newton
-        return 0;
+        // return 0;
+        return G * this.mass * other.getMass() / pow(this.position.getDistance(other.getPosition()), 2);
     }
 
     public double getSurfaceGravity(){
         // TODO: get the surface acceleration of this object (assuming a perfect sphere)
         // return value in m/s^2
-        return 0;
+        // return 0;
+        return G * this.mass / pow(this.radius, 2);
     }
 
     public double getDensity(){
         // TODO: get the density of this object assuming a perfect sphere
         // return value in g/cm^3 (normal density units).
-        return 0;
+        // return 0;
+        return (this.mass / this.getVolume()) / 1000.0;
     }
 
     @Override
     public double getVolume() {
         // TODO: return the volume of this object assuming a perfect sphere
-        return 0;
+        // return 0;
+        return ((4.0/3.0)*Math.PI * pow(this.radius, 3));
     }
 
     public double getCircularSpeed(double otherMass, double distanceToOther){
         // TODO: get the amplitude of the velocity required to orbit another object in a perfect circle
-        return 0;
+        // return 0;
+        return sqrt((G * (this.mass + otherMass)) / distanceToOther);
     }
 
     public double getEscapeSpeed(double distance){
         // TODO: get the minimum velocity required to escape the gravitational influence of this object,
         //  at the provided distance (to the center of mass)
-        return 0;
+        // return 0;
+        return sqrt((2*G*this.mass) / distance);
     }
 
     public double getOrbitalSpeed(double currDistance, double targetHeight){
@@ -69,7 +83,23 @@ public class CelestialObject implements CelestialObjectInterface{
         //  and the targetHeight above this object (assuming perfect sphere)
         //  - return 0 if the orbit is impossible
 
-        return 0;
+        // return 0;
+
+        // assumes distance to body center
+        // targetHeight is above the planet surface
+        // Check that position is above body surface
+        if (currDistance <= this.radius){
+            System.out.println("Distance is inside the body radius");
+            return 0;
+        }
+
+        double grav = G * this.mass;
+        double periapsis = this.radius + targetHeight;
+
+        return sqrt(
+                grav * (2 / currDistance - 2 / (currDistance + periapsis))
+        );
+
     }
 
     // endregion
@@ -95,7 +125,7 @@ public class CelestialObject implements CelestialObjectInterface{
         }
     }
 
-    public void update(int timestep, List<CelestialObjectInterface> bodies){
+    public void update(int timestep, List<CelestialObject> bodies){
         // assuming timestep is in seconds
         if (!this.getAffectedByGravity()){
             // Update position based on manually set velocity
@@ -106,7 +136,7 @@ public class CelestialObject implements CelestialObjectInterface{
         // 2. update the position
         Vector velocityChange = new Vector();
 
-        for (CelestialObjectInterface obj : bodies){
+        for (CelestialObject obj : bodies){
             if (obj.equals(this)){
                 continue;
             }
@@ -144,7 +174,15 @@ public class CelestialObject implements CelestialObjectInterface{
 
     @Override
     public Color getColor() {
-        return new Color(246, 149, 99);
+        return switch (this.getName()) {
+            case "Sun" -> Planets.SUN.getColor();
+            case "Mercury" -> Planets.MERCURY.getColor();
+            case "Venus" -> Planets.VENUS.getColor();
+            case "Earth" -> Planets.EARTH.getColor();
+            case "Moon" -> Planets.MOON.getColor();
+            case "Mars" -> Planets.MARS.getColor();
+            default -> new Color(207, 207, 178);
+        };
     }
 
     public String getMovementStats() {

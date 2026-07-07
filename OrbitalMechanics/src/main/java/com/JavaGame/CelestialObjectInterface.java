@@ -13,7 +13,6 @@ public interface CelestialObjectInterface {
     double getOrbitalSpeed(double currDistance, double targetHeight);
     void updatePosition(int timestep);
     void setCircularOrbitVelocity(final CelestialObjectInterface parentObject);
-    void update(int timestep, List<CelestialObjectInterface> bodies);
 
     VectorInterface getPosition();
     VectorInterface getVelocity();

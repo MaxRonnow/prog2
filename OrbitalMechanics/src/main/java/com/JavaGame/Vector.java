@@ -1,5 +1,8 @@
 package com.JavaGame;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Vector implements VectorInterface{
 
     /*
@@ -26,42 +29,54 @@ public class Vector implements VectorInterface{
 
     public double getDistance(final VectorInterface other){
         // TODO: implement the distance between two vectors (the hypotenuse)
-        return 0;
+        // return 0;
+        return sqrt(pow(this.x - other.getX(), 2) + pow(this.y - other.getY(), 2));
     }
 
     public Vector vectorSum(final VectorInterface other){
         // TODO: sum of two vectors
-        return new Vector();
+        // return new Vector();
+        return new Vector(this.x + other.getX(), this.y + other.getY());
     }
 
     public Vector vectorTo(final VectorInterface other){
         // TODO: what is the vector that connects this to the other vector?
-        return new Vector();
+        // return new Vector();
+        return new Vector(other.getX() - this.x, other.getY() - this.y);
+
     }
 
     public Vector scalarMult(final double z){
+        // TODO: scale each vector dimension with z
+        // return new Vector();
         return new Vector(this.x * z, this.y * z);
     }
 
     public Vector normalize(){
         // TODO: return a vector in the same direction as this but with length 1
-        return new Vector();
+        // return new Vector();
+        return this.scalarMult(1 / getAmplitude());
     }
 
     public double getAmplitude(){
         // TODO: what is the length of the vector?
-        return 0;
+        // return 0;
+        return sqrt(pow(this.x, 2) + pow(this.y, 2));
     }
 
     public double dotProduct(final VectorInterface other){
         // TODO: get the dot product of two vectors
-        return 0;
+        // return 0;
+        return this.x * other.getX() + this.y * other.getY();
     }
 
     public Vector getNormal(){
         // TODO: Return a new vector of this that is rotated 90 degrees counter-clockwise
-        return new Vector();
+        // return new Vector();
+        return new Vector(-this.y, this.x);
     }
+
+    // region DO NOT EDIT
 
     public Vector flip() {
         return new Vector(-this.x, -this.y);
@@ -78,4 +93,6 @@ public class Vector implements VectorInterface{
     public double getY(){
         return this.y;
     }
+
+    // endregion
 }

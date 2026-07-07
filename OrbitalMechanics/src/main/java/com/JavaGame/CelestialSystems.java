@@ -5,12 +5,12 @@ import java.util.List;
 
 public class CelestialSystems {
 
-    public static List<CelestialObjectInterface> EARTH_MOON_SYSTEM() {
+    public static List<CelestialObject> EARTH_MOON_SYSTEM() {
         CelestialSystems systems = new CelestialSystems();
-        List<CelestialObjectInterface> bodies = new ArrayList<>();
+        List<CelestialObject> bodies = new ArrayList<>();
 
-        CelestialObjectInterface earth = systems.getEarth();
-        CelestialObjectInterface moon = systems.getMoon();
+        CelestialObject earth = systems.getEarth();
+        CelestialObject moon = systems.getMoon();
         moon.setCircularOrbitVelocity(earth);
         bodies.add(earth);
         bodies.add(moon);
@@ -18,37 +18,37 @@ public class CelestialSystems {
         return bodies;
     }
 
-    public static List<CelestialObjectInterface> INNER_SOLAR_SYSTEM() {
+    public static List<CelestialObject> INNER_SOLAR_SYSTEM() {
         CelestialSystems systems = new CelestialSystems();
-        List<CelestialObjectInterface> bodies = new ArrayList<>();
+        List<CelestialObject> bodies = new ArrayList<>();
 
-        CelestialObjectInterface sun = systems.getSun();
-        CelestialObjectInterface earth = systems.getEarth();
+        CelestialObject sun = systems.getSun();
+        CelestialObject earth = systems.getEarth();
         earth.setCircularOrbitVelocity(sun);
         bodies.add(sun);
         bodies.add(earth);
         // add other planets here :)
-        CelestialObjectInterface merc = systems.getMercury();
+        CelestialObject merc = systems.getMercury();
         merc.setCircularOrbitVelocity(sun);
         bodies.add(merc);
 
-        CelestialObjectInterface ven = systems.getVenus();
+        CelestialObject ven = systems.getVenus();
         ven.setCircularOrbitVelocity(sun);
         bodies.add(ven);
 
-        CelestialObjectInterface mars = systems.getMars();
+        CelestialObject mars = systems.getMars();
         mars.setCircularOrbitVelocity(sun);
         bodies.add(mars);
 
         return bodies;
     }
 
-    public static List<CelestialObjectInterface> TRIPLE_SUN_SYSTEM(){
+    public static List<CelestialObject> TRIPLE_SUN_SYSTEM(){
         CelestialSystems systems = new CelestialSystems();
-        List<CelestialObjectInterface> bodies = new ArrayList<>();
+        List<CelestialObject> bodies = new ArrayList<>();
 
-        CelestialObjectInterface sun1 = systems.getSun();
-        CelestialObjectInterface sun2 = systems.getSun();
+        CelestialObject sun1 = systems.getSun();
+        CelestialObject sun2 = systems.getSun();
         sun2.setPosition(systems.getVector(219098450e3, -49098450e3));
         sun2.setAffectedByGravity(true);
         sun1.setAffectedByGravity(true);
@@ -57,17 +57,17 @@ public class CelestialSystems {
         bodies.add(sun1);
         bodies.add(sun2);
 
-        CelestialObjectInterface sun3 = systems.getSun();
+        CelestialObject sun3 = systems.getSun();
         sun3.setPosition(systems.getVector(-179098450e3, 0));
         sun3.setAffectedByGravity(true);
         sun3.setCircularOrbitVelocity(sun1);
         bodies.add(sun3);
 
-        CelestialObjectInterface merc = systems.getMercury();
+        CelestialObject merc = systems.getMercury();
         merc.setCircularOrbitVelocity(sun1);
         bodies.add(merc);
 
-        CelestialObjectInterface mars = systems.getMars();
+        CelestialObject mars = systems.getMars();
         mars.setCircularOrbitVelocity(sun2);
         bodies.add(mars);
 
@@ -75,31 +75,31 @@ public class CelestialSystems {
     }
 
     // Helper methods - update these with student implementations once they're complete
-    private CelestialObjectInterface getEarth(){
-        return new Earth();
+    private CelestialObject getEarth(){
+        return Planets.EARTH.getNew();
     }
 
-    private CelestialObjectInterface getMoon(){
-        return new Moon();
+    private CelestialObject getMoon(){
+        return Planets.MOON.getNew();
     }
 
-    private CelestialObjectInterface getSun(){
-        return new Sun();
+    private CelestialObject getSun(){
+        return Planets.SUN.getNew();
     }
 
-    private CelestialObjectInterface getMercury(){
-        return new Mercury();
+    private CelestialObject getMercury(){
+        return Planets.MERCURY.getNew();
     }
 
-    private CelestialObjectInterface getVenus(){
-        return new Venus();
+    private CelestialObject getVenus(){
+        return Planets.VENUS.getNew();
     }
 
-    private CelestialObjectInterface getMars(){
-        return new Mars();
+    private CelestialObject getMars(){
+        return Planets.MARS.getNew();
     }
 
-    private VectorInterface getVector(double x, double y){
+    private Vector getVector(double x, double y){
         return new Vector(x, y);
     }
 }
