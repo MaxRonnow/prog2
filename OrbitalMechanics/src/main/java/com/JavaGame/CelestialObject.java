@@ -8,12 +8,9 @@ import static java.lang.Math.sqrt;
 
 public class CelestialObject implements CelestialObjectInterface{
 
-    // TODO: set the gravitational constant G here, and the astronomical unit (in meters)
+    // TODO: set the gravitational constant G here
     // public static final double G = 0.0; // gravitational constant (m^3 kg^-1 s^-2)
     public static final double G = 6.67430e-11; // gravitational constant (m^3 kg^-1 s^-2)
-    // public static final double AU = 0.0; // Astronomical Unit (m)
-    public static final double AU = 1.496e11;  // Astronomical Unit (m)
-
 
     // region Class Fields & Constructor
     private final double mass; // in kg (use double to hold large astronomical masses)
@@ -41,7 +38,7 @@ public class CelestialObject implements CelestialObjectInterface{
         // TODO: get the force of gravity between this and the other object
         // return value is in Newton
         // return 0;
-        return G * this.mass * other.getMass() / pow(this.position.getDistance(other.getPosition()), 2);
+        return (G * this.getMass() * other.getMass()) / pow(this.position.getDistance(other.getPosition()), 2);
     }
 
     public double getSurfaceGravity(){

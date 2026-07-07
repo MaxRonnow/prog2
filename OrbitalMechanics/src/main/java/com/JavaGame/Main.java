@@ -10,7 +10,6 @@ public class Main extends JFrame implements KeyListener {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
-
     private static final int DELAY = 10;  // milliseconds between frames
     
     private SimulationPanel simulationPanel;
@@ -143,7 +142,8 @@ public class Main extends JFrame implements KeyListener {
         SwingUtilities.invokeLater(() -> {
             // Once students implement Vector methods and CelestialObject methods,
             // this will automatically work since CelestialSystems uses the helper methods
-            List<CelestialObject> bodies = CelestialSystems.TRIPLE_SUN_SYSTEM();
+            // TODO: change simulated system here :)
+            List<CelestialObject> bodies = CelestialSystems.INNER_SOLAR_SYSTEM();
 
             Main frame = new Main();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

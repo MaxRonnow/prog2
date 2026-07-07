@@ -6,11 +6,10 @@ import java.util.List;
 public class CelestialSystems {
 
     public static List<CelestialObject> EARTH_MOON_SYSTEM() {
-        CelestialSystems systems = new CelestialSystems();
         List<CelestialObject> bodies = new ArrayList<>();
 
-        CelestialObject earth = systems.getEarth();
-        CelestialObject moon = systems.getMoon();
+        CelestialObject earth = Planets.EARTH.getNew(new Vector());
+        CelestialObject moon = Planets.MOON.getNew(new Vector(Planets.MOON.getSemiMajorAxis(), 0));
         moon.setCircularOrbitVelocity(earth);
         bodies.add(earth);
         bodies.add(moon);

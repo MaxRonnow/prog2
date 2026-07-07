@@ -1,7 +1,6 @@
 package com.JavaGame;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 public class Vector implements VectorInterface{
 
@@ -43,7 +42,6 @@ public class Vector implements VectorInterface{
         // TODO: what is the vector that connects this to the other vector?
         // return new Vector();
         return new Vector(other.getX() - this.x, other.getY() - this.y);
-
     }
 
     public Vector scalarMult(final double z){
@@ -61,7 +59,7 @@ public class Vector implements VectorInterface{
     public double getAmplitude(){
         // TODO: what is the length of the vector?
         // return 0;
-        return sqrt(pow(this.x, 2) + pow(this.y, 2));
+        return sqrt(pow(abs(this.x), 2) + pow(abs(this.y), 2));
     }
 
     public double dotProduct(final VectorInterface other){

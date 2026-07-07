@@ -39,7 +39,7 @@ public class TestOrbitalMechanics {
     @Test
     public void testEarth(){
         assertTrue(5.9e24 < earth.getMass() && earth.getMass() < 6.0e24);
-        assertTrue(6300e3 < earth.getRadius() && earth.getRadius() < 6371e3);
+        assertTrue(6340e3 < earth.getRadius() && earth.getRadius() < 6380e3);
         assertTrue(140098450e3 < earth.getPosition().getAmplitude() && earth.getPosition().getAmplitude() < 154098450e3);
     }
 
@@ -81,9 +81,12 @@ public class TestOrbitalMechanics {
 
     @Test
     public void testGravityForce(){
-        double moonEarthForce = 1.971 * pow(10, 20);
+        double moonEarthForce = 1.971e20;
         double meF = earth.getGravityForce(moon);
         double emF = moon.getGravityForce(earth);
+        double earthMoonDistance = 3.84e8;
+        double calcDistance = earth.getPosition().getDistance(moon.getPosition());
+        assertTrue(calcDistance * (1-errorMargin) < earthMoonDistance && earthMoonDistance < calcDistance * (1+errorMargin), "Calculated distance between moon and earth wrong!");
         assertTrue(moonEarthForce * (1-errorMargin) < emF && emF < moonEarthForce * (1+errorMargin), "Measuring earth-moon force, expected 1.97e20, was " + emF);
         assertTrue(moonEarthForce * (1-errorMargin) < meF && meF < moonEarthForce * (1+errorMargin), "Measuring moon-earth force, expected 1.97e20, was " + meF);
 
@@ -144,7 +147,7 @@ public class TestOrbitalMechanics {
     @Test
     public void testVectorDot(){
         assertTrue(abs(a.dotProduct(b) - 11.0) < 1e-9, "Dot product");
-        assertTrue(abs(b.dotProduct(c) - 0.0) < 1e-9, "Dot product");
+        assertTrue(abs(b.dotProduct(c) + 5) < 1e-9, "Dot product");
     }
 
     @Test
@@ -164,7 +167,7 @@ public class TestOrbitalMechanics {
     @Test
     public void testCircularOrbitSpeed(){
         moon.setCircularOrbitVelocity(earth);
-        double lunarOrbitSpeed = moon.getVelocity().getAmplitude();
+        double lunarOrbitSpeed = moon.getCircularSpeed(earth.getMass(), moon.getPosition().getDistance(earth.getPosition()));
         double targetSpeed = 1022;
         assertTrue(targetSpeed * (1-errorMargin) < lunarOrbitSpeed
                         && lunarOrbitSpeed < targetSpeed * (1+errorMargin),

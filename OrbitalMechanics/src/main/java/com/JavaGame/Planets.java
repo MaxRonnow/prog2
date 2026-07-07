@@ -65,11 +65,13 @@ public enum Planets {
 
     public double getSemiMajorAxis(){
 
+        // TODO: the semi-major axis of the moon is relative to earth
+
         return switch (this){
             case EARTH -> 149098450e3;
             case MERCURY -> 57909050e3;
             case VENUS -> 108208000e3;
-            case MOON -> 384399e3;
+            case MOON -> 3.84e8;
             case MARS -> 227909200e3;
             case SUN -> 0.0;
         };
@@ -111,6 +113,18 @@ public enum Planets {
     }
 
     public CelestialObject getNew(){
+        if (this == MOON){
+            // Special case for moon, needs have semi-major axis relative to earth position
+            return new CelestialObject(
+                    this.getMass(),
+                    this.getRadius(),
+                    new Vector(
+                            EARTH.getSemiMajorAxis() + this.getSemiMajorAxis(),
+                            0
+                    ),
+                    this.getName()
+            );
+        }
         return new CelestialObject(this.getMass(), this.getRadius(), new Vector(this.getSemiMajorAxis(), 0), this.getName());
     }
 
