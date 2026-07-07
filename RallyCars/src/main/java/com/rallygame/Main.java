@@ -1,7 +1,4 @@
-package com.prog2;
-
-import com.prog2.roads.Road;
-import com.prog2.vehicles.Vehicle;
+package com.rallygame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +42,7 @@ public class Main {
                 g.setColor(c);
                 g.fillRect(currX, roadY, roadLength, roadGirth);
                 for (int k=0; k<currRoad.getLength(); k += 10){
-                    com.prog2.roads.Turn t = currRoad.getTurnAt(k);
+                    Turn t = currRoad.getTurnAt(k);
                     if (t != null){
                         int turnX = (int) (currX + t.getAtRoadDistance() * pixelsPerMeter);
                         g.setColor(new Color(240, 245, 46));

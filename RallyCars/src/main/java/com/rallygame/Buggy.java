@@ -1,9 +1,6 @@
-package com.prog2.vehicles;
-
-import com.prog2.roads.Road;
+package com.rallygame;
 
 import java.awt.*;
-import java.util.List;
 
 public class Buggy extends Vehicle {
     // takes an additional 3 turns to start after refueling
@@ -27,11 +24,11 @@ public class Buggy extends Vehicle {
             this.isPostRefueling = true;
             postRefuelingTurns++;
             this.refueledLastTurn = false;
-            System.out.println(this + "has trouble starting up!");
+            System.out.println(this + " has trouble starting up!");
             if (this.postRefuelingTurns >= 3){
                 this.postRefuelingTurns = 0;
                 this.isPostRefueling = false;
-                System.out.println(this + "has now successfully started the engine!");
+                System.out.println(this + " has now successfully started the engine!");
             }
         } else {
             this.refueledLastTurn = this.getIsRefueling();

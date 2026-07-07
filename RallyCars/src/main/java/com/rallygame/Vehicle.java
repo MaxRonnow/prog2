@@ -1,6 +1,4 @@
-package com.prog2.vehicles;
-
-import com.prog2.roads.Road;
+package com.rallygame;
 
 import java.awt.*;
 
@@ -105,6 +103,7 @@ public abstract class Vehicle {
                 this.currentSpeed = this.getSurfaceSpeed(this.currentRoad);
             }
         }
+
         // 4. Check if in a turn
         if (this.currentRoad.getTurnAt(this.getRoadDistanceTravelled()) != null){
             // System.out.println(this + " is in a turn");
@@ -116,7 +115,7 @@ public abstract class Vehicle {
         // 6. remove fuel
         this.fuelLeft -= this.getFuelConsumption();
 
-        // (7. Vehicle implementations might do other stuff here)
+        // (7. Vehicle implementations might do other stuff here or before 1.)
     }
 
     public Road getCurrentRoad(){

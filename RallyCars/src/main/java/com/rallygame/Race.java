@@ -1,7 +1,4 @@
-package com.prog2;
-
-import com.prog2.roads.*;
-import com.prog2.vehicles.*;
+package com.rallygame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +46,8 @@ public class Race {
         for (Vehicle vehicle : vehicles) {
             vehicle.forward();
             if (vehicle.isFinnished()){
-                if (vehicle.getDoneInTurns() > timestep){
-                    vehicle.setDoneInTurns(timestep);
+                if (vehicle.getDoneInTurns() > timestep + 1){
+                    vehicle.setDoneInTurns(timestep + 1);
                 }
             } else {
                 atleastOneCarRunning = true;

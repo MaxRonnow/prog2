@@ -1,6 +1,4 @@
-package com.prog2.vehicles;
-
-import com.prog2.roads.Road;
+package com.rallygame;
 
 import java.awt.*;
 

@@ -1,6 +1,4 @@
-package com.prog2.vehicles;
-
-import com.prog2.roads.Road;
+package com.rallygame;
 
 import java.awt.*;
 import java.util.Objects;
@@ -19,10 +17,10 @@ public class SnowMobile extends Vehicle {
         if (this.getCurrentRoad() != null) {
             if (this.getCurrentRoad().getLength() <= this.getRoadDistanceTravelled() && Objects.equals(this.getCurrentRoad().getName(), "Snow")) {
                 this.nextRoad();
-                System.out.println(this + "has cut the track in the snow!");
+                System.out.println(this + " has cut the track in the snow!");
                 if (this.getCurrentRoad() == null) {
                     // We are finnished I guess
-                    System.out.println("Finnished!");
+                    System.out.println("Finished!");
                 }
             }
         }

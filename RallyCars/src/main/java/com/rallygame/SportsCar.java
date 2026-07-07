@@ -1,6 +1,4 @@
-package com.prog2.vehicles;
-
-import com.prog2.roads.Road;
+package com.rallygame;
 
 import java.awt.*;
 
@@ -24,12 +22,12 @@ public class SportsCar extends Vehicle {
             this.turnsInSnow++;
             if (this.turnsInSnow >= 10) {
                 if (this.breakDownTurns >= 2){
-                    System.out.println(this + "has repaired snow damages");
+                    System.out.println(this + " has repaired snow damages");
                     this.turnsInSnow = 0;
                     this.breakDownTurns = 0;
                 } else {
                     this.breakDownTurns++;
-                    System.out.println(this + "has broken down in snow!");
+                    System.out.println(this + " has broken down in snow!");
                     return;
                 }
             }

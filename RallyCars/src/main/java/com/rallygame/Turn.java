@@ -1,4 +1,4 @@
-package com.prog2.roads;
+package com.rallygame;
 
 public class Turn {
     private final int atRoadDistance;

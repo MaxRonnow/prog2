@@ -1,8 +1,7 @@
-package com.prog2.roads;
+package com.rallygame;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public enum Road {
 
