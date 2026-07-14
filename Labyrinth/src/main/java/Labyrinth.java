@@ -3,8 +3,10 @@ import Tiling.Tile;
 import Tiling.TileType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Labyrinth {
     private final Tile[][] tileMap;
@@ -130,5 +132,48 @@ public class Labyrinth {
         }
         Collections.shuffle(dirList);
         return dirList;
+    }
+
+    private Tile getRandomTile(){
+        List<Tile> tiles = new ArrayList<>(Arrays.stream(this.tileMap)  //'array' is two-dimensional
+                .flatMap(Arrays::stream)
+                .toList());
+        Collections.shuffle(tiles);
+        return tiles.getFirst();
+    }
+
+    public void removeRandomWalls(int nr){
+        int removedWalls = 0;
+        int randomDirection;
+        while (removedWalls < nr){
+            Tile randomTile = getRandomTile();
+            if (randomTile != null){
+                randomDirection = (int) Math.floor(Math.random() * randomTile.getTileType().getNrEdges());
+                if (!isOutsideWall(randomTile, randomDirection) && randomTile.getClockwiseWalls()[randomDirection]){
+                    removeWall(randomTile, randomDirection);
+                    removedWalls++;
+                }
+            }
+        }
+    }
+
+    private boolean isOutsideWall(Tile tile, int dir) {
+        return tile.getTileType().isOutsideWall(tile.getRow(), tile.getCol(), dir);
+    }
+
+    public void setRandomStartEnd() {
+        Tile randomStart = getRandomTile();
+        this.startTile.addWall(startTile.getTileType().getNrEdges() - 1);
+        while (randomStart == null){
+            randomStart = getRandomTile();
+        }
+        this.startTile = randomStart;
+
+        Tile randomEnd = getRandomTile();
+        this.endTile.addWall(1);
+        while (randomEnd == null){
+            randomEnd = getRandomTile();
+        }
+        this.endTile = randomEnd;
     }
 }

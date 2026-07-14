@@ -96,6 +96,6 @@ public class MazeSolver implements MazeSolverInterface {
         // no wall in front, we move forward
         moveForward();
         turnAround();
-        solve();
+        // solve();
     }
 }

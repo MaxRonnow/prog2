@@ -126,6 +126,11 @@ public class HexTile implements Tile {
     }
 
     @Override
+    public void addWall(int i) {
+        this.walls[i] = true;
+    }
+
+    @Override
     public String toString() {
         return this.getTileType().toString() + " at (" + this.getRow() + ", " + this.getCol() + ")";
     }

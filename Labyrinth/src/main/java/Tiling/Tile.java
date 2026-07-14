@@ -51,4 +51,6 @@ public interface Tile {
     void setVisited(boolean b);
 
     default double getOffset(){ return 10.0; }
+
+    void addWall(int i);
 }

@@ -4,26 +4,68 @@ import Tiling.TileType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Set;
 
-public class Main extends JFrame {
+import static java.lang.Math.max;
 
+public class Main extends JFrame implements KeyListener {
+
+    // TODO:
+    //  - auto-increment solve() (simulate an "e" press endlessly with 0.1s delay) + toggle on/off keybind
+    //  - triangles?
+    //  - draw darker color of solution path if overlap
+    //  - save the mazes somehow (+ solution path)
+    //  - tests for everything
+    //  - IMPORTANT: what should students be doing?
+    //      - Only the "solve()" method?
+    //      - Maybe the drawing of tiles
+    //  - Non-perfect mazes (remove more random walls)
+
+    private LabyrinthPanel labPanel;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Labyrinth lab = new Labyrinth(Setup.ROWS, Setup.COLS, TileType.HEXAGON);
             lab.createMaze();
-            MazeSolver solver = new MazeSolver(lab);
-            solver.solve();
+            // lab.removeRandomWalls(max(Setup.ROWS, Setup.COLS) * 1);  // creates a non-perfect maze
+            lab.setRandomStartEnd();
 
-            JFrame frame = new JFrame("Labyrinth");
+            MazeSolver solver = new MazeSolver(lab);
+            // solver.solve();
+
+            Main frame = new Main();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             LabyrinthPanel labPanel = new LabyrinthPanel(lab, solver);
+            frame.labPanel = labPanel;
             frame.add(labPanel);
             frame.setSize(WIDTH, HEIGHT);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+            frame.addKeyListener(frame);
+            frame.setFocusable(true);
         });
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        char key = e.getKeyChar();
+        if (key == 'e') {
+            labPanel.nextStep();
+            labPanel.repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 
     static class LabyrinthPanel extends JPanel {
@@ -34,6 +76,10 @@ public class Main extends JFrame {
             this.labyrinth = labyrinth;
             this.solver = solver;
             setBackground(Color.BLACK);
+        }
+
+        public void nextStep(){
+            solver.solve();
         }
 
         @Override
@@ -74,6 +120,17 @@ public class Main extends JFrame {
                 g.setStroke(new BasicStroke((float) thickness));
                 g.drawLine((int)startX, (int)startY, (int)endX, (int)endY);
             }
+
+            // draw start end
+            g.setColor(Color.GREEN);
+            int x = (int) labyrinth.getStartTile().getPosX();
+            int y = (int) labyrinth.getStartTile().getPosY();
+            g.drawOval(x, y, 5, 5);
+
+            g.setColor(Color.RED);
+            x = (int) labyrinth.getEndTile().getPosX();
+            y = (int) labyrinth.getEndTile().getPosY();
+            g.drawOval(x, y, 5, 5);
         }
     }
 }
