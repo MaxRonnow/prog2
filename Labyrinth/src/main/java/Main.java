@@ -1,3 +1,4 @@
+import Tiling.Setup;
 import Tiling.Tile;
 import Tiling.TileType;
 
@@ -6,22 +7,18 @@ import java.awt.*;
 
 public class Main extends JFrame {
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 800;
-    private static final int ROWS = 19;
-    private static final int COLS = 19;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Labyrinth lab = new Labyrinth(ROWS, COLS, TileType.SQUARE);
-            lab.removeWall(lab.getTileAt(0, 0), 1);
-            lab.removeWall(lab.getTileAt(0, 1), 2);
+            Labyrinth lab = new Labyrinth(Setup.ROWS, Setup.COLS, TileType.HEXAGON);
             lab.createMaze();
+            MazeSolver solver = new MazeSolver(lab);
+            solver.solve();
 
             JFrame frame = new JFrame("Labyrinth");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            LabyrinthPanel labPanel = new LabyrinthPanel(lab);
+            LabyrinthPanel labPanel = new LabyrinthPanel(lab, solver);
             frame.add(labPanel);
             frame.setSize(WIDTH, HEIGHT);
             frame.setLocationRelativeTo(null);
@@ -31,9 +28,11 @@ public class Main extends JFrame {
 
     static class LabyrinthPanel extends JPanel {
         private final Labyrinth labyrinth;
+        private final MazeSolver solver;
 
-        public LabyrinthPanel(Labyrinth labyrinth){
+        public LabyrinthPanel(Labyrinth labyrinth, MazeSolver solver) {
             this.labyrinth = labyrinth;
+            this.solver = solver;
             setBackground(Color.BLACK);
         }
 
@@ -46,19 +45,34 @@ public class Main extends JFrame {
             // draw tiles
             for (Tile[] tileRow : labyrinth.getTileMap()){
                 for (Tile t : tileRow){
-                    double[][] corners = t.getCorners();
-                    int nrC = t.getTileType().getNrEdges();
-                    for (int i=0; i<nrC; i++){
-                        double[] currCorner = corners[i];
-                        double[] nextCorner = corners[(i+1) % nrC];
-                        // TODO: assert proper index
-                        boolean isWall = t.getClockwiseWalls()[i];
-                        if (isWall){
-                            g.setColor(Color.WHITE);
-                            g.drawLine((int)currCorner[0], (int)currCorner[1], (int)nextCorner[0], (int)nextCorner[1]);
+                    if (t != null){
+                        double[][] corners = t.getCorners();
+                        int nrC = t.getTileType().getNrEdges();
+                        for (int i=0; i<nrC; i++){
+                            double[] currCorner = corners[i];
+                            double[] nextCorner = corners[(i+1) % nrC];
+                            // TODO: assert proper index
+                            boolean isWall = t.getClockwiseWalls()[i];
+                            if (isWall){
+                                g.setColor(Color.WHITE);
+                                g.drawLine((int)currCorner[0], (int)currCorner[1], (int)nextCorner[0], (int)nextCorner[1]);
+                            }
                         }
                     }
                 }
+            }
+            // draw solver path
+            for (int i=0; i<solver.getPath().size() - 1; i++){
+                Tile startTile =  solver.getPath().get(i);
+                Tile endTile =  solver.getPath().get(i + 1);
+                double startX = startTile.getPosX();
+                double startY = startTile.getPosY();
+                double endX = endTile.getPosX();
+                double endY = endTile.getPosY();
+                double thickness = 4;
+                g.setColor(Color.YELLOW);
+                g.setStroke(new BasicStroke((float) thickness));
+                g.drawLine((int)startX, (int)startY, (int)endX, (int)endY);
             }
         }
     }

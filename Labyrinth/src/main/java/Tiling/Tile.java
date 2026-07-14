@@ -49,4 +49,6 @@ public interface Tile {
 
     boolean isVisited();
     void setVisited(boolean b);
+
+    default double getOffset(){ return 10.0; }
 }

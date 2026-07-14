@@ -13,14 +13,14 @@ public enum TileType {
             case SQUARE:
                 return new SquareTile(row, col);
             case HEXAGON:
-                throw new NullPointerException();
+                return new HexTile(row, col);
             default:
                 throw new NullPointerException();
         }
     }
     
     public int[][] getClockWiseDirections(){
-        
+        // row, col
         switch (this) {
             case TRIANGLE:
                 // TODO: fix

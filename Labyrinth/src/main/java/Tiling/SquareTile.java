@@ -1,16 +1,12 @@
 package Tiling;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SquareTile implements Tile {
 
     // TOP LEFT CORNER OF TILE (0, 0) IS POSITION (0, 0)
 
     private final int row;
     private final int col;
-    public static final double IN_RADIUS = 20;
-    private boolean[] walls;
+    private final boolean[] walls;
     private boolean isVisited;
 
     public SquareTile(final int row, final int col){
@@ -19,7 +15,6 @@ public class SquareTile implements Tile {
         this.walls = new boolean[]{true, true, true, true};
         this.isVisited = false;
     }
-
 
     @Override
     public int getRow() {
@@ -33,27 +28,27 @@ public class SquareTile implements Tile {
 
     @Override
     public double getWidth() {
-        return 2 * IN_RADIUS;
+        return 2 * Setup.IN_RADIUS;
     }
 
     @Override
     public double getHeight() {
-        return 2 * IN_RADIUS;
+        return 2 * Setup.IN_RADIUS;
     }
 
     @Override
     public double getInRadius() {
-        return IN_RADIUS;
+        return Setup.IN_RADIUS;
     }
 
     @Override
     public double getPosX() {
-        return this.col * this.getWidth();
+        return this.col * this.getWidth() + getWidth() / 2 + getOffset();
     }
 
     @Override
     public double getPosY() {
-        return this.row * this.getHeight();
+        return this.row * this.getHeight() + getHeight() / 2 + getOffset();
     }
 
     @Override
@@ -69,8 +64,10 @@ public class SquareTile implements Tile {
 
     @Override
     public double[][] getCorners() {
-        double topLeftX = this.getPosX();
-        double topLeftY = this.getPosY();
+        double halfWidth = this.getWidth() / 2;
+        double halfHeight = this.getHeight() / 2;
+        double topLeftX = this.getPosX() - halfWidth;
+        double topLeftY = this.getPosY() - halfHeight;
         return new double[][]{
                 {topLeftX, topLeftY},
                 {topLeftX + this.getWidth(), topLeftY},
@@ -92,5 +89,19 @@ public class SquareTile implements Tile {
     @Override
     public void setVisited(boolean b) {
         this.isVisited = b;
+    }
+
+    @Override
+    public String toString() {
+        return this.getTileType().toString() + " at (" + this.getRow() + ", " + this.getCol() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SquareTile squareTile = (SquareTile) o;
+        // TODO: do we skip checking if walls are equal?
+        return this.getRow() == squareTile.getRow() && this.getCol() == squareTile.getCol();
     }
 }
