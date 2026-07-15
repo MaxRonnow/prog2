@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Bridge {
     private final Island island1;
     private final Island island2;
@@ -9,14 +6,15 @@ public class Bridge {
     public Bridge(Island island1, Island island2) {
         this.island1 = island1;
         this.island2 = island2;
-        length = (float) Math.sqrt( Math.pow((island2.getX() - island1.getX()), 2) + Math.pow((island2.getY() - island1.getY()), 2) );
+        length = (float) Math.sqrt( Math.pow((island2.x() - island1.x()), 2) + Math.pow((island2.y() - island1.y()), 2) );
     }
 
-    public List<Island> getIslands() {
-        List<Island> islands = new ArrayList<>();
-        islands.add(island1);
-        islands.add(island2);
-        return islands;
+    public Island getIsland1() {
+        return island1;
+    }
+
+    public Island getIsland2() {
+        return island2;
     }
 
     public float getLength() {
@@ -24,7 +22,7 @@ public class Bridge {
     }
 
     public String toString() {
-        return "Island1: (x: " + island1.getX() + " y: " + island1.getY() + ") Island2: (x: " + island2.getX() + " y: " + island2.getY() + ")";
+        return "Island1: (x: " + island1.x() + " y: " + island1.y() + ") Island2: (x: " + island2.x() + " y: " + island2.y() + ")";
     }
 
 

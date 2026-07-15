@@ -20,56 +20,46 @@ public class Archipelago {
         return bridges;
     }
 
-    public void buildBridges(){
-        List<Bridge> tempBridges = new ArrayList<>(bridges);
-
-        for (Island island1 : islands) {
-            for (Island island2 : islands) {
-                if (island1 != island2 && !bridgeExists(tempBridges, island1, island2)) {
-                        Bridge b = new Bridge(island1, island2);
-                        tempBridges.add(b);
-                }
+    // Build the bridges using Kruskals algorithm
+    public void buildBridges(Graphics g) {
+        // Create a temporary array with all candidate bridges
+        List<Bridge> tempBridges = new ArrayList<>();
+        int n = islands.size();
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                tempBridges.add(new Bridge(islands.get(i), islands.get(j)));
             }
         }
+        // Sort the temporary array according to the length of the bridges
+        tempBridges.sort((b1, b2) -> Double.compare(b1.getLength(), b2.getLength()));
 
-        while (bridges.size() != islands.size() - 1) {
-            Bridge currShortest = tempBridges.getFirst();
+        // Kurskals algorithm
+        while (bridges.size() != islands.size() - 1 && !tempBridges.isEmpty()) {
+            // Take the shortest remaining candidate
+            Bridge currShortest = tempBridges.removeFirst();
 
-            for (Bridge b : tempBridges) {
-                if (b.getLength() < currShortest.getLength()) {
-                    currShortest = b;
-                }
-            }
-
+            // Add the bridge and check for cycles, if cycle is found remove bridge
             bridges.add(currShortest);
-
-            if (checkForCycles()){
+            if (!checkForCycles()){
+                // drawBridge expects x1, y1, x2, y2
+                g.drawBridge();
+            }
+            else {
                 bridges.remove(currShortest);
             }
-            tempBridges.remove(currShortest);
-
         }
     }
 
-    private boolean bridgeExists(List<Bridge> bridges, Island island1, Island island2) {
-        for (Bridge temp : bridges) {
-            Island a = temp.getIslands().get(0);
-            Island b = temp.getIslands().get(1);
-            if ((island1 == a && island2 == b) || (island1 == b && island2 == a)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
+    // Check for cycles in the graph
     private boolean checkForCycles(){
         Map<Island, Island> parent = new HashMap<>();
-        for (Island island : islands) parent.put(island, island);
+        for (Island island : islands){
+            parent.put(island, island);
+        }
 
         for (Bridge bridge : bridges) {
-            Island a = find(parent, bridge.getIslands().get(0));
-            Island b = find(parent, bridge.getIslands().get(1));
+            Island a = find(parent, bridge.getIsland1());
+            Island b = find(parent, bridge.getIsland2());
             if (a == b) return true;
             parent.put(a, b);
         }
@@ -85,15 +75,9 @@ public class Archipelago {
         return root;
     }
 
-
     public void printBridges(){
         for (Bridge b : bridges) {
             IO.println(b.toString());
         }
     }
-
-
-
-
-
 }

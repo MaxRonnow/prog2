@@ -3,20 +3,30 @@ import java.awt.*;
 
 public class Graphics extends JFrame {
 
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 1920;
+    private static final int HEIGHT = 1080;
+
+    IslandPanel islandPanel;
 
     public Graphics(Archipelago a) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Bridges");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            IslandPanel islandPanel = new IslandPanel(a);
+            islandPanel = new IslandPanel(a);
             frame.add(islandPanel);
             frame.setSize(WIDTH, HEIGHT);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
+        });
+    }
+
+    public void drawBridge() {
+        SwingUtilities.invokeLater(() -> {
+            if (islandPanel != null) {
+                islandPanel.repaint();
+            }
         });
     }
 
@@ -36,14 +46,15 @@ public class Graphics extends JFrame {
             g.setColor(Color.WHITE);
 
             for (Island i: archipelago.getIslands()) {
-                g.drawOval((int) i.getX() - 2, (int) i.getY() - 2, 4, 4);
+                g.drawOval((int) i.x() - 2, (int) i.y() - 2, 4, 4);
             }
 
-            for (Bridge b: archipelago.getBridges()) {
-                int x1 = (int) b.getIslands().get(0).getX();
-                int y1 = (int) b.getIslands().get(0).getY();
-                int x2 = (int) b.getIslands().get(1).getX();
-                int y2 = (int) b.getIslands().get(1).getY();
+            for (Bridge b: new java.util.ArrayList<>(archipelago.getBridges())) {
+                if (b == null) continue;
+                int x1 = (int) b.getIsland1().x();
+                int y1 = (int) b.getIsland1().y();
+                int x2 = (int) b.getIsland2().x();
+                int y2 = (int) b.getIsland2().y();
 
                 g.drawLine(x1, y1, x2, y2);
             }

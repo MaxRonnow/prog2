@@ -1,17 +1,21 @@
 void main() {
 
-    final int ISLAND_COUNT = 5;
+    final int ISLAND_COUNT = 3000;
+    final int SPREAD_X = 1400;
+    final int SPREAD_Y = 850;
+
     Random rand = new Random();
     List<Island> islands = new ArrayList<>();
 
     for (int i = 0; i < ISLAND_COUNT; i++) {
-        islands.add( new Island(rand.nextFloat() * 200, rand.nextFloat() * 200));
+        islands.add( new Island(rand.nextFloat() * SPREAD_X, rand.nextFloat() * SPREAD_Y));
     }
 
     Archipelago archipelago = new Archipelago(islands);
-    archipelago.buildBridges();
-    archipelago.printBridges();
-
     Graphics g = new Graphics(archipelago);
+    archipelago.buildBridges(g);
+    g.drawBridge();
+    IO.println("Done!");
+    //archipelago.printBridges();
 
 }
