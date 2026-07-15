@@ -3,6 +3,14 @@ package com.JavaGame;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This file creates systems that could be simulated by changing the Main file at line 157.
+ * Create your own simulated systems by studying the provided ones below and creating them in a similar manner.
+ * Some values for distances in this file are made simply by trial and error.
+ *
+ * @author Jesper Andersson, Kursutvecklare 2026
+ */
+
 public class CelestialSystems {
 
     public static List<CelestialObject> EARTH_MOON_SYSTEM() {
@@ -73,7 +81,7 @@ public class CelestialSystems {
         return bodies;
     }
 
-    // Helper methods - update these with student implementations once they're complete
+    // Helper methods
     private CelestialObject getEarth(){
         return Planets.EARTH.getNew();
     }

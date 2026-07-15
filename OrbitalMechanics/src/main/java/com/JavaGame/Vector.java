@@ -10,7 +10,8 @@ public class Vector implements VectorInterface{
 
     The class represents a 2D vector in the real coordinate system as x and y doubles.
     This is an immutable class, meaning it could be converted to a "record" class easily.
-    Therefore, any calculation that returns a Vector should either return "this" or a new Vector
+    Therefore, any calculation that returns a Vector should either return "this" or a new Vector.
+    This class implements VectorInterface such that no method is accidentally deleted.
      */
 
     private final double x;

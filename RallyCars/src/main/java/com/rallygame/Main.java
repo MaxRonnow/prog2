@@ -3,6 +3,19 @@ package com.rallygame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This is the main file for the Rally Cars programming exercise.
+ * In this exercise you will create classes extending the abstract class Vehicle to practice class inheritance.
+ *
+ * This file handles creating the vehicles and racetrack, and displaying them.
+ * You can modify the WIDTH and HEIGHT below to fit your screen well.
+ * Do not edit anything else (except the delay on line 110 set to 333, change to ~50 for very fast races)
+ *
+ * RallyPanel contains the race and displays the roads and vehicles.
+ *
+ * @author Jesper Andersson, Kursutvecklare 2026
+ */
+
 public class Main {
 
     private static final int WIDTH = 1000;
@@ -66,7 +79,6 @@ public class Main {
                 int roadLength = (int) (currRoad.getLength() * pixelsPerMeter);
                 for (int i=0;i<nrVehicles; i++){
                     Vehicle veh = this.race.getVehicles().get(i);
-                    // TODO: might need to override Road equals method
                     if (veh.getCurrentRoad() != null && veh.getCurrentRoad() == currRoad){
                         int currPos = (int) (currX + veh.getRoadDistanceTravelled() * pixelsPerMeter);
                         g.setColor(veh.getColor());
@@ -76,8 +88,6 @@ public class Main {
                 currRoad = currRoad.getNextRoad();
                 currX += roadLength;
             }
-
-
         }
     }
 
@@ -96,7 +106,9 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
+            // Delay set to 3 updates/iterations per second
             new Timer(333, e -> {
+                // update the racing cars by one iteration, then redraw everything
                 race.update();
                 panel.repaint();
             }).start();

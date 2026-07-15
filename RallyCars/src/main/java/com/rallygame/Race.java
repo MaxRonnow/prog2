@@ -5,6 +5,16 @@ import java.util.List;
 
 public class Race {
 
+    /**
+     * This file contains the default race settings:
+     * Roads: Dirt -> Asphalt -> Gravel -> Snow (with turns)
+     * Cars: RallyCar, Buggy, SportsCar, SnowMobile
+     *
+     * Handles simulating each iteration
+     *
+     * DO NOT CHANGE THIS FILE
+     */
+
     private int timestep;
     private final Road startRoad;
     private final List<Vehicle> vehicles;

@@ -6,6 +6,18 @@ import java.util.List;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
+/**
+ * This file contains the calculations for updating position and velocity due to gravitational forces
+ * For accurate simulations, real values and formulas are used.
+ * However, calculations are kept simple due to them being 2D only (everything is in the same plane).
+ * Implement the methods in this file in the relevant region.
+ * Online sources such as Wikipedia and StackOverflow will be sufficient.
+ *
+ * This class implements CelestialObjectInterface in order to keep check that no method is being deleted
+ *
+ * @author Jesper Andersson, Kursutvecklare 2026
+ */
+
 public class CelestialObject implements CelestialObjectInterface{
 
     // TODO: set the gravitational constant G here
@@ -21,7 +33,7 @@ public class CelestialObject implements CelestialObjectInterface{
     private boolean affectedByGravity = true;  // for skipping gravity calculations for mostly static objects (magnitudes more massive objects)
 
     public CelestialObject(double mass, double radius, Vector position, String name){ // mass (kg), radius (m)
-        // Constructor: mass in kg, radius in m, position in m
+        // Constructor: mass in kg, radius in m, position in m, velocity in m/s
         this.mass = mass;
         this.radius = radius;
         this.position = position;
@@ -31,7 +43,7 @@ public class CelestialObject implements CelestialObjectInterface{
 
     // endregion
 
-    // region TODO: IMPLEMENT THESE
+    // region TODO: IMPLEMENT THE METHODS IN THIS REGION
 
     public double getGravityForce(final CelestialObjectInterface other){
         // TODO: get the force of gravity between this and the other object
