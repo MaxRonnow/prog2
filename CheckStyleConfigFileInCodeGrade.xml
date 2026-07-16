@@ -1,0 +1,574 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+          "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+  Configure your Checkstyle step: https://checkstyle.org/config.html
+  Newest Checkstyle version is 13.X (as of July 2026), CodeGrade supports version 10.12.3.
+  Some functionality is therefore missing.
+
+  Do this check before uploading necessary files for functionality testing
+
+  This is generic code-quality checks for a Programming 2 course.
+  This module can be copied and pasted to all assignments where students submit files.
+
+  This was written by ChatGPT but verified by Jesper Andersson
+
+    Severity policy:
+    error   = likely correctness problem or clearly ineffective code
+    warning = significant design or maintainability problem
+    info    = style advice or a heuristic that may have valid exceptions
+
+  This configuration is intended to give understandable feedback to students.
+  Limits are intentionally more permissive than many professional style guides.
+
+  Limitations of Checkstyle:
+  - It cannot generally determine that a method is dead, because a public method may be called externally.
+  - It cannot reliably determine whether an instance field should be final, since that requires data-flow analysis across constructors and methods.
+  - It cannot know whether an arbitrary method may return null.
+  - It cannot determine that a public method could be private without knowing the required assignment API.
+  - FinalClass has a narrower meaning: it primarily identifies classes that cannot be extended because they only have private constructors.
+-->
+<module name="Checker">
+    <!--
+      Only inspect Java source files.
+
+      Teacher note:
+      This prevents Checkstyle from attempting to inspect generated reports,
+      configuration files, or other resources in the submission directory.
+    -->
+    <property name="fileExtensions" value="java"/>
+
+    <!--
+      Treat a tab character as four columns for checks such as LineLength.
+
+      Teacher note:
+      This does not itself allow or reject tabs. FileTabCharacter handles that.
+    -->
+    <property name="tabWidth" value="4"/>
+
+    <!-- ================================================================
+         FILE-LEVEL INFORMATIONAL CHECKS
+         ================================================================ -->
+
+    <!--
+      INFO: Warn about unusually long source lines.
+
+      Teacher note:
+      Package declarations, imports, and URLs are ignored because they can be
+      difficult or impossible to split clearly. Increase the limit if starter
+      code frequently contains long method signatures.
+    -->
+    <module name="LineLength">
+        <property name="severity" value="info"/>
+        <property name="max" value="120"/>
+        <property name="ignorePattern"
+                  value="^(package|import) .*|.*https?://.*$"/>
+
+        <message key="maxLineLen"
+                 value="This line is longer than {0} characters. Split the expression or statement into clearer parts if possible."/>
+    </module>
+
+    <!--
+      INFO: Discourage tab characters in source files.
+
+      Teacher note:
+      Tabs can appear at different widths in different editors. This rule is
+      informational because tabs do not normally affect program correctness.
+    -->
+    <module name="FileTabCharacter">
+        <property name="severity" value="info"/>
+        <property name="eachLine" value="true"/>
+
+        <message key="containsTab"
+                 value="This line contains a tab character. Use spaces so indentation is displayed consistently in different editors."/>
+    </module>
+
+    <!--
+      INFO: Require a newline at the end of each source file.
+
+      Teacher note:
+      This mainly improves compatibility with command-line tools, version
+      control systems, and generated diffs.
+    -->
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="info"/>
+
+        <message key="noNewlineAtEOF"
+                 value="Add a newline after the final line of this file."/>
+    </module>
+
+    <!-- ================================================================
+         JAVA SOURCE CHECKS
+         ================================================================ -->
+
+    <module name="TreeWalker">
+
+        <!-- ============================================================
+             CORRECTNESS ERRORS
+             ============================================================ -->
+
+        <!--
+          ERROR: Strings must not be compared using == or !=.
+
+          Teacher note:
+          This is an error because == compares object references rather than
+          the textual contents of String objects.
+        -->
+        <module name="StringLiteralEquality">
+            <property name="severity" value="error"/>
+
+            <message key="string.literal.equality"
+                     value="Do not compare String values using == or !=. Use equals(), for example: first.equals(second)."/>
+        </module>
+
+        <!--
+          ERROR: equals() and hashCode() must be overridden together.
+
+          Teacher note:
+          This is important when objects are placed in HashSet, HashMap, or
+          other hash-based collections.
+        -->
+        <module name="EqualsHashCode">
+            <property name="severity" value="error"/>
+
+            <message key="equals.noHashCode"
+                     value="This class overrides equals() but not hashCode(). Override both methods so equal objects also have equal hash codes."/>
+
+            <message key="equals.noEquals"
+                     value="This class overrides hashCode() but not equals(). Override both methods so object equality remains consistent."/>
+        </module>
+
+        <!--
+          ERROR: Detect standalone semicolons that have no effect.
+
+          Teacher note:
+          A common example is an accidental semicolon after an if or loop:
+              if (condition);
+        -->
+        <module name="EmptyStatement">
+            <property name="severity" value="error"/>
+
+            <message key="empty.statement"
+                     value="This empty statement has no effect. Remove the extra semicolon or add the intended statement or block."/>
+        </module>
+
+        <!--
+          ERROR: Detect accidental fall-through between switch cases.
+
+          Teacher note:
+          Intentional fall-through can be documented using a recognized
+          fall-through comment, but beginners should normally use break,
+          return, yield, continue, or throw.
+        -->
+        <module name="FallThrough">
+            <property name="severity" value="error"/>
+            <property name="checkLastCaseGroup" value="true"/>
+
+            <message key="fall.through"
+                     value="This switch case may continue into the next case unintentionally. Add break, return, yield, throw, or an explicit fall-through comment."/>
+        </module>
+
+        <!-- ============================================================
+             DESIGN AND MAINTAINABILITY WARNINGS
+             ============================================================ -->
+
+        <!--
+          WARNING: Fields should normally be private.
+
+          Teacher note:
+          Public static final constants are allowed by the check. Public or
+          package-visible mutable fields weaken encapsulation because other
+          classes can change an object's internal state directly.
+        -->
+        <module name="VisibilityModifier">
+            <property name="severity" value="warning"/>
+            <property name="packageAllowed" value="false"/>
+            <property name="protectedAllowed" value="false"/>
+            <property name="allowPublicFinalFields" value="false"/>
+
+            <message key="variable.notPrivate"
+                     value="Field ''{0}'' should normally be private. Keep object state private and provide methods for controlled access when needed."/>
+        </module>
+
+        <!--
+          WARNING: Limit method and constructor length.
+
+          Teacher note:
+          Empty lines and comments are not counted. A 40-line limit is
+          intentionally lenient for students who are learning decomposition.
+        -->
+        <module name="MethodLength">
+            <property name="severity" value="warning"/>
+            <property name="max" value="40"/>
+            <property name="countEmpty" value="false"/>
+
+            <message key="maxLen.method"
+                     value="Method ''{0}'' is {1} lines long; the configured maximum is {2}. Divide it into smaller methods with one clear responsibility."/>
+        </module>
+
+        <!--
+          WARNING: Limit method and constructor parameter counts.
+
+          Teacher note:
+          Overridden methods are ignored because students may be required to
+          use a signature defined by an interface or superclass.
+        -->
+        <module name="ParameterNumber">
+            <property name="severity" value="warning"/>
+            <property name="max" value="5"/>
+            <property name="ignoreOverriddenMethods" value="true"/>
+
+            <message key="maxParam"
+                     value="This method or constructor has {0} parameters; the configured maximum is {1}. Consider storing related values in an object or moving behaviour to the class that owns the data."/>
+        </module>
+
+        <!--
+          WARNING: Restrict the number of executable statements.
+
+          Teacher note:
+          This complements MethodLength. A method may be short in lines while
+          still containing too many separate operations.
+        -->
+        <module name="ExecutableStatementCount">
+            <property name="severity" value="warning"/>
+            <property name="max" value="30"/>
+            <property name="tokens"
+                      value="METHOD_DEF,CTOR_DEF,COMPACT_CTOR_DEF"/>
+
+            <message key="maxStatement"
+                     value="This method or constructor contains {0} executable statements; the configured maximum is {1}. Consider extracting smaller helper methods."/>
+        </module>
+
+        <!--
+          WARNING: Limit the complexity of individual boolean expressions.
+
+          Teacher note:
+          Complex conditions can often be replaced by clearly named boolean
+          variables or helper methods.
+        -->
+        <module name="BooleanExpressionComplexity">
+            <property name="severity" value="warning"/>
+            <property name="max" value="4"/>
+
+            <message key="maxOperator"
+                     value="This boolean expression uses {0} logical operators; the configured maximum is {1}. Split it into smaller named conditions."/>
+        </module>
+
+        <!--
+          WARNING: Limit nested if statements.
+
+          Teacher note:
+          Deep nesting can often be reduced using early returns, guard clauses,
+          or helper methods.
+        -->
+        <module name="NestedIfDepth">
+            <property name="severity" value="warning"/>
+            <property name="max" value="3"/>
+
+            <message key="nested.if.depth"
+                     value="This if statement is nested more than {0} levels deep. Consider using an early return or extracting part of the logic into another method."/>
+        </module>
+
+        <!--
+          WARNING: Limit nested for loops.
+
+          Teacher note:
+          Two nested loops are allowed. More than this may indicate that the
+          algorithm should be decomposed or represented differently.
+        -->
+        <module name="NestedForDepth">
+            <property name="severity" value="warning"/>
+            <property name="max" value="2"/>
+
+            <message key="nested.for.depth"
+                     value="This for loop is nested more than {0} levels deep. Consider extracting part of the loop logic into another method."/>
+        </module>
+
+        <!--
+          WARNING: Report repeated string literals.
+
+          Teacher note:
+          Two occurrences are allowed. A warning is produced from the third
+          occurrence onward. Empty strings and common whitespace strings are
+          ignored because constants would not improve readability for them.
+        -->
+        <module name="MultipleStringLiterals">
+            <property name="severity" value="warning"/>
+            <property name="allowedDuplicates" value="2"/>
+            <property name="ignoreStringsRegexp"
+                      value='^(&quot;&quot;|&quot; &quot;|&quot;\n&quot;|&quot;\t&quot;)$'/>
+
+            <message key="multiple.string.literal"
+                     value="The string {0} appears {1} times in this file. If it represents one shared value, replace the repeated text with a named constant."/>
+        </module>
+
+        <!--
+          WARNING: Report unused local variables.
+
+          Teacher note:
+          This check does not report unused fields, parameters, or methods.
+          It is useful for detecting unfinished calculations and local dead
+          code. UnusedLocalVariable is available in Checkstyle 10.12.3.
+        -->
+        <module name="UnusedLocalVariable">
+            <property name="severity" value="warning"/>
+
+            <message key="unused.local.var"
+                     value="Local variable ''{0}'' is assigned a value but is never used. Remove it or use the calculated value."/>
+
+            <message key="unused.named.local.var"
+                     value="Local variable ''{0}'' is declared but never used. Remove unfinished or unnecessary code."/>
+        </module>
+
+        <!--
+          WARNING: Discourage assigning new values to parameters.
+
+          Teacher note:
+          Parameter assignment is legal Java, but it can make it difficult to
+          distinguish the original input from a modified local value.
+        -->
+        <module name="ParameterAssignment">
+            <property name="severity" value="warning"/>
+
+            <message key="parameter.assignment"
+                     value="Do not assign a new value to parameter ''{0}''. Create a separate local variable so the original input remains clear."/>
+        </module>
+
+        <!--
+          WARNING: Require constants-only utility classes to hide constructors.
+
+          Teacher note:
+          A class containing only static members usually should not be
+          instantiated. This check may need suppression for framework classes.
+        -->
+        <module name="HideUtilityClassConstructor">
+            <property name="severity" value="warning"/>
+
+            <message key="hide.utility.class"
+                     value="This class contains only static members and should not normally be instantiated. Add a private constructor, or redesign it as an ordinary object."/>
+        </module>
+
+        <!--
+          WARNING: Detect classes that cannot meaningfully be extended.
+
+          Teacher note:
+          This check mainly detects classes whose constructors are private.
+          It does not generally identify every class that could be final.
+        -->
+        <module name="FinalClass">
+            <property name="severity" value="warning"/>
+
+            <message key="final.class"
+                     value="Class ''{0}'' cannot be extended because its constructors are private. Declare the class final to make that design explicit."/>
+        </module>
+
+        <!--
+          WARNING: Put every top-level class in its own source file.
+
+          Teacher note:
+          Nested classes are still permitted. This rule simplifies finding and
+          compiling classes in beginner assignments.
+        -->
+        <module name="OneTopLevelClass">
+            <property name="severity" value="warning"/>
+
+            <message key="one.top.level.class"
+                     value="Put each top-level class or interface in its own Java file."/>
+        </module>
+
+        <!--
+          WARNING: Remove imports that are never used.
+
+          Teacher note:
+          Javadoc references are ignored because documentation is not a focus
+          of this course configuration.
+        -->
+        <module name="UnusedImports">
+            <property name="severity" value="warning"/>
+            <property name="processJavadoc" value="false"/>
+
+            <message key="import.unused"
+                     value="Import ''{0}'' is not used. Remove unnecessary imports to keep the file clear."/>
+        </module>
+
+        <!--
+          WARNING: Remove imports that Java already provides or has imported.
+
+          Teacher note:
+          Examples include importing a class from java.lang or importing a
+          class from the same package.
+        -->
+        <module name="RedundantImport">
+            <property name="severity" value="warning"/>
+
+            <message key="import.lang"
+                     value="Importing ''{0}'' is unnecessary because classes in java.lang are available automatically."/>
+
+            <message key="import.same"
+                     value="Importing ''{0}'' is unnecessary because it belongs to the same package."/>
+
+            <message key="import.duplicate"
+                     value="Import ''{0}'' appears more than once. Remove the duplicate import."/>
+        </module>
+
+        <!--
+          WARNING: Prefer a known non-null String literal on the left of equals.
+
+          Teacher note:
+          "text".equals(value) is safe when value is null. This is a warning,
+          not an error, because value.equals("text") may be safe when the
+          program has already established that value is non-null.
+        -->
+        <module name="EqualsAvoidNull">
+            <property name="severity" value="warning"/>
+            <property name="ignoreEqualsIgnoreCase" value="false"/>
+
+            <message key="equals.avoid.null"
+                     value="Place the known non-null String on the left side of equals(), for example: &quot;text&quot;.equals(value). This avoids a possible NullPointerException."/>
+        </module>
+
+        <!--
+          WARNING: Require a default branch in traditional switch statements.
+
+          Teacher note:
+          This encourages students to consider unexpected values. Depending on
+          the assignment, exhaustive enum switches may be valid without default
+          and may require suppression.
+        -->
+        <module name="MissingSwitchDefault">
+            <property name="severity" value="warning"/>
+
+            <message key="missing.switch.default"
+                     value="Add a default branch to explain how unexpected switch values should be handled."/>
+        </module>
+
+        <!-- ============================================================
+             INFORMATIONAL CODE-QUALITY ADVICE
+             ============================================================ -->
+
+        <!--
+          INFO: Identify numeric literals that may deserve named constants.
+
+          Teacher note:
+          This reports each qualifying number independently. Standard
+          Checkstyle cannot increase severity only when the same number occurs
+          repeatedly. Values -1, 0, 1, and 2 are ignored because they are
+          commonly used for indexes, counters, and simple comparisons.
+        -->
+        <!--
+        <module name="MagicNumber">
+            <property name="severity" value="info"/>
+            <property name="ignoreNumbers" value="-1, 0, 1, 2"/>
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <property name="ignoreAnnotationElementDefaults" value="true"/>
+
+            <message key="magic.number"
+                     value="The number {0} is written directly in the code. If it represents a meaningful value, consider giving it a descriptive static final constant name."/>
+        </module>
+        -->
+        <!--
+          INFO: Require at most one statement per source line.
+
+          Teacher note:
+          Separate lines make debugging, feedback, and stack traces easier to
+          interpret.
+        -->
+        <module name="OneStatementPerLine">
+            <property name="severity" value="info"/>
+
+            <message key="one.statement.per.line"
+                     value="Place each statement on its own line so the code is easier to read and debug."/>
+        </module>
+
+        <!--
+          INFO: Require one variable declaration at a time.
+
+          Teacher note:
+          int width, height; is legal, but separate declarations allow each
+          variable to be documented and initialized clearly.
+        -->
+        <module name="MultipleVariableDeclarations">
+            <property name="severity" value="info"/>
+
+            <message key="multiple.variable.declarations"
+                     value="Declare one variable per statement. Separate declarations are easier to read and modify."/>
+
+            <message key="multiple.variable.declarations.comma"
+                     value="Declare one variable per statement instead of separating declarations with commas."/>
+        </module>
+
+        <!--
+          INFO: Use Java's conventional modifier order.
+
+          Teacher note:
+          For example, write public static final rather than static public
+          final. Modifier order does not change behaviour.
+        -->
+        <module name="ModifierOrder">
+            <property name="severity" value="info"/>
+
+            <message key="mod.order"
+                     value="Place Java modifiers in the conventional order, such as public static final."/>
+
+            <message key="annotation.order"
+                     value="Place annotations before the other modifiers of this declaration."/>
+        </module>
+
+        <!--
+          INFO: Add @Override to overridden methods.
+
+          Teacher note:
+          @Override allows the compiler to detect spelling and signature
+          mistakes when a method is intended to replace an inherited method.
+        -->
+        <module name="MissingOverride">
+            <property name="severity" value="info"/>
+
+            <message key="annotation.missing.override"
+                     value="Add @Override to show that this method is intended to override an inherited method."/>
+        </module>
+
+        <!--
+          INFO: Discourage abbreviations that are difficult to read.
+
+          Teacher note:
+          Common programming abbreviations are explicitly permitted. Constants
+          and static members are ignored to avoid conflicts with constant
+          naming conventions.
+        -->
+        <module name="AbbreviationAsWordInName">
+            <property name="severity" value="info"/>
+            <property name="allowedAbbreviationLength" value="3"/>
+            <property name="ignoreFinal" value="true"/>
+            <property name="ignoreStatic" value="true"/>
+            <property name="ignoreOverriddenMethods" value="true"/>
+            <property name="allowedAbbreviations"
+                      value="URL,URI,HTML,XML,JSON,API,ID,UI"/>
+
+            <message key="abbreviation.as.word"
+                     value="Abbreviation ''{0}'' in this name is difficult to read. Use a normal word or an accepted abbreviation."/>
+        </module>
+
+        <!--
+          INFO: Detect local variables and parameters that hide fields.
+
+          Teacher note:
+          Constructor parameters and ordinary setters are ignored because
+          patterns such as this.name = name are standard and readable.
+        -->
+        <module name="HiddenField">
+            <property name="severity" value="info"/>
+            <property name="ignoreConstructorParameter" value="true"/>
+            <property name="ignoreSetter" value="true"/>
+            <property name="setterCanReturnItsClass" value="true"/>
+            <property name="ignoreAbstractMethods" value="true"/>
+
+            <message key="hidden.field"
+                     value="The name ''{0}'' hides a field with the same name. Rename the local value or use this.{0} when referring to the field."/>
+        </module>
+
+    </module>
+</module>
