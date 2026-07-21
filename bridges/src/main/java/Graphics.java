@@ -1,19 +1,27 @@
+/**
+ * This class is responsible to draw the window displaying the islands and bridges,
+ * as well as drawing the islands and bridges.
+ *
+ * DO NOT MODIFY
+ */
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Graphics extends JFrame {
 
+    /// Width and height of the window
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 1080;
 
     IslandPanel islandPanel;
 
-    public Graphics(Archipelago a) {
+    public Graphics(Archipelago a, Traveler t) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Bridges");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            islandPanel = new IslandPanel(a);
+            islandPanel = new IslandPanel(a, t);
             frame.add(islandPanel);
             frame.setSize(WIDTH, HEIGHT);
             frame.setLocationRelativeTo(null);
@@ -22,6 +30,9 @@ public class Graphics extends JFrame {
         });
     }
 
+    /**
+     * Refreshes the window, draws newly added bridges.
+     */
     public void drawBridge() {
         SwingUtilities.invokeLater(() -> {
             if (islandPanel != null) {
@@ -30,35 +41,61 @@ public class Graphics extends JFrame {
         });
     }
 
+    /**
+     * Draws an island to the screen
+     * @param g the graphics context
+     * @param island the island to be drawn
+     * @param color the color of the island to be drawn
+     */
+    public static void drawIsland(java.awt.Graphics2D g, Island island, Color color) {
+        g.setColor(color);
+        g.fillOval((int) island.getX() - 3, (int) island.getY() - 3, 6, 6);
+        g.setColor(Color.WHITE);
+    }
+
+
+    /**
+     * Draw logic
+     */
     static class IslandPanel extends JPanel {
         private final Archipelago archipelago;
 
-        public IslandPanel(Archipelago archipelago) {
+        public IslandPanel(Archipelago archipelago,  Traveler traveler) {
             this.archipelago = archipelago;
             setBackground(Color.BLACK);
         }
 
+        /**
+         * draws the islands and bridges, draws the islands and bridges that are part of the traveled path a different color.
+         */
         @Override
         protected void paintComponent(java.awt.Graphics g0){
             super.paintComponent(g0);
             Graphics2D g = (Graphics2D) g0;
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setColor(Color.WHITE);
 
             for (Island i: archipelago.getIslands()) {
-                g.drawOval((int) i.x() - 2, (int) i.y() - 2, 4, 4);
+                if(!i.isPartOfPath()){
+                    drawIsland(g, i, Color.WHITE);
+                }
+                else {
+                    drawIsland(g, i, Color.RED);
+                }
             }
 
             for (Bridge b: new java.util.ArrayList<>(archipelago.getBridges())) {
                 if (b == null) continue;
-                int x1 = (int) b.getIsland1().x();
-                int y1 = (int) b.getIsland1().y();
-                int x2 = (int) b.getIsland2().x();
-                int y2 = (int) b.getIsland2().y();
+                int x1 = (int) b.getIsland1().getX();
+                int y1 = (int) b.getIsland1().getY();
+                int x2 = (int) b.getIsland2().getX();
+                int y2 = (int) b.getIsland2().getY();
 
+                if (b.getIsland1().isPartOfPath() && b.getIsland2().isPartOfPath()) {
+                    g.setColor(Color.GREEN);
+                }
                 g.drawLine(x1, y1, x2, y2);
+                g.setColor(Color.WHITE);
             }
-
         }
     }
 }

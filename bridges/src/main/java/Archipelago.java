@@ -1,17 +1,27 @@
+/**
+ * This class represents an archipelago, i.e. a collection of islands.
+ * It also keeps track of the bridges built
+ */
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Archipelago {
-    private List<Island> islands;
-    private List<Bridge> bridges;
+
+    /**
+     * The Archipelago keeps track of which islands it consists of and which bridges have been built
+     */
+    private final List<Island> islands;
+    private final List<Bridge> bridges;
 
     public Archipelago(List<Island> islands) {
         this.islands = islands;
         bridges = new ArrayList<>();
     }
 
+    /**
+     * Getters and Setters
+     */
     public List<Island> getIslands() {
         return islands;
     }
@@ -20,61 +30,17 @@ public class Archipelago {
         return bridges;
     }
 
-    // Build the bridges using Kruskals algorithm
-    public void buildBridges(Graphics g) {
-        // Create a temporary array with all candidate bridges
-        List<Bridge> tempBridges = new ArrayList<>();
-        int n = islands.size();
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                tempBridges.add(new Bridge(islands.get(i), islands.get(j)));
-            }
-        }
-        // Sort the temporary array according to the length of the bridges
-        tempBridges.sort((b1, b2) -> Double.compare(b1.getLength(), b2.getLength()));
-
-        // Kurskals algorithm
-        while (bridges.size() != islands.size() - 1 && !tempBridges.isEmpty()) {
-            // Take the shortest remaining candidate
-            Bridge currShortest = tempBridges.removeFirst();
-
-            // Add the bridge and check for cycles, if cycle is found remove bridge
-            bridges.add(currShortest);
-            if (!checkForCycles()){
-                // drawBridge expects x1, y1, x2, y2
-                g.drawBridge();
-            }
-            else {
-                bridges.remove(currShortest);
-            }
-        }
+    public void addBridge(Bridge bridge) {
+        bridges.add(bridge);
     }
 
-    // Check for cycles in the graph
-    private boolean checkForCycles(){
-        Map<Island, Island> parent = new HashMap<>();
-        for (Island island : islands){
-            parent.put(island, island);
-        }
-
-        for (Bridge bridge : bridges) {
-            Island a = find(parent, bridge.getIsland1());
-            Island b = find(parent, bridge.getIsland2());
-            if (a == b) return true;
-            parent.put(a, b);
-        }
-        return false;
+    public void removeBridge(Bridge bridge) {
+        bridges.remove(bridge);
     }
 
-    private Island find(Map<Island, Island> parent, Island island) {
-        Island root = parent.get(island);
-        if (root != island) {
-            root = find(parent, root);
-            parent.put(island, root);
-        }
-        return root;
-    }
-
+    /**
+     * Use this if you want to print all bridges built to the console
+     */
     public void printBridges(){
         for (Bridge b : bridges) {
             IO.println(b.toString());
