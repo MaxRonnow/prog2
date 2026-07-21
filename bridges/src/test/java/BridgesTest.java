@@ -1,3 +1,9 @@
+/**
+ * Test suite to test the methods to be implemented in the assignment
+ *
+ * @author Max Rönnow
+ */
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -180,8 +186,6 @@ class BridgesTest {
 
         Archipelago a = new Archipelago(islands);
         BridgeBuilder bb = new BridgeBuilder(a);
-        Traveler t = new Traveler(a, bb);
-        bb.setGraphics(new Graphics(a, t));
 
         bb.bridgeCandidates = candidates;
 
@@ -215,8 +219,6 @@ class BridgesTest {
 
         Archipelago a = new Archipelago(islands);
         BridgeBuilder bb = new BridgeBuilder(a);
-        Traveler t = new Traveler(a, bb);
-        bb.setGraphics(new Graphics(a, t));
 
         List<Bridge> expectedBridges = new ArrayList<>();
         expectedBridges.add(new Bridge(islands.get(0), islands.get(1)));

@@ -1,3 +1,14 @@
+/**
+ * The main entrypoint of the program
+ * This class initializes all needed classes and defines important program parameters such as ISLAND_COUNT
+ *
+ * DO NOT MODIFY
+ *  Except ISLAND_COUNT to test the program with varying amount of islands
+ *  Values between 10-2000 are recommended, 200 is a good middle ground
+ *
+ * @author Max Rönnow
+ */
+
 void main() {
 
     // amount of islands to generate
@@ -26,13 +37,10 @@ void main() {
     BridgeBuilder bridgeBuilder = new BridgeBuilder(archipelago);
     Traveler t = new Traveler(archipelago, bridgeBuilder);
     Graphics g = new Graphics(archipelago, t);
-    bridgeBuilder.setGraphics(g);
 
     // build the bridges
     bridgeBuilder.buildBridges();
     t.travel();
 
-    // draw the bridges
-    g.drawBridge();
     IO.println("Done!");
 }

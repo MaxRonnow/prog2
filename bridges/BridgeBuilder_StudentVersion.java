@@ -43,8 +43,7 @@ public class BridgeBuilder {
      * First it has to load the candidate bridges after which it can construct the bridges.
      */
     public void buildBridges() {
-        loadCandidates();
-        bridgeConstructor();
+
     }
 
 
@@ -55,12 +54,7 @@ public class BridgeBuilder {
      * Remember to make sure all bridges are unique! (island1, island2) is the same bridge as (island2, island1)!
      */
     public void loadCandidates() {
-        int n = archipelago.getIslands().size();
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                bridgeCandidates.add(new Bridge(archipelago.getIslands().get(i), archipelago.getIslands().get(j)));
-            }
-        }
+
     }
 
 
@@ -71,9 +65,7 @@ public class BridgeBuilder {
      * @return the shortest bridge
      */
     public Bridge getShortestCandidate() {
-        bridgeCandidates.sort((b1, b2) -> Float.compare(b1.getLength(), b2.getLength()));
 
-        return bridgeCandidates.removeFirst();
     }
 
 
@@ -100,17 +92,7 @@ public class BridgeBuilder {
      */
     public void bridgeConstructor() {
         while (getCount() != archipelago.getIslands().size() - 1) {
-            // Take the shortest remaining candidate
-            Bridge currShortest = getShortestCandidate();
 
-            // Add the bridge and check for cycles, if cycle is found remove bridge
-            addToMap(currShortest);
-            archipelago.addBridge(currShortest);
-
-            if (hasCycle()) {
-                removeFromMap(currShortest);
-                archipelago.removeBridge(currShortest);
-            }
         }
     }
 
@@ -143,12 +125,7 @@ public class BridgeBuilder {
      * for each of its bridges, the count has to be divided before returning.
      */
     public int getCount() {
-        int count = 0;
-        for (var i : bridgeMap.entrySet()) {
-            count += i.getValue().size();
-        }
 
-        return count / 2;
     }
 
 

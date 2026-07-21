@@ -38,11 +38,7 @@ public class Traveler {
      * This method should use the move() method to move the traveler from start to target
      */
     public void travel() {
-        while (currentLocation != target) {
-            move();
-        }
-        visited.add(currentLocation);
-        currentLocation.setPartOfPath(true);
+
     }
 
 
@@ -57,19 +53,7 @@ public class Traveler {
      *  Make sure the target island also gets added to visited!
      */
     public void move() {
-        Island closest = getClosestUnvisitedIsland();
 
-        if (closest == null) {
-            currentLocation.setPartOfPath(false);
-            path.removeLast();
-            currentLocation = path.getLast();
-        }
-        else{
-            currentLocation = closest;
-            closest.setPartOfPath(true);
-            visited.add(currentLocation);
-            path.add(closest);
-        }
     }
 
 
@@ -82,27 +66,7 @@ public class Traveler {
      * @return closest unvisited island, if no unvisited islands, return null.
      */
     public Island getClosestUnvisitedIsland(){
-        List<Island> nextCandidates = bridgeBuilder.getBridgeMap().get(currentLocation);
 
-        Island closest = null;
-
-        for (Island i : nextCandidates) {
-            if (!visited.contains(i)) {
-                closest = i;
-            }
-        }
-
-        if (closest == null) {
-            return null;
-        }
-
-        for (Island island : nextCandidates) {
-            if ((getDistance(currentLocation, island) < getDistance(currentLocation, closest)) && !visited.contains(island)) {
-                closest = island;
-            }
-        }
-
-        return closest;
     }
 
 
@@ -115,9 +79,6 @@ public class Traveler {
      * @return returns the distance as float.
      */
     public float getDistance(Island island1, Island island2) {
-        if (island2 == null || island1 == null) {
-            return Float.MAX_VALUE;
-        }
-        return (float) Math.sqrt( Math.pow((island2.getX() - island1.getX()), 2) + Math.pow((island2.getY() - island1.getY()), 2) );
+
     }
 }

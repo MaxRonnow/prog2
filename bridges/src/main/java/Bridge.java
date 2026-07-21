@@ -1,8 +1,11 @@
 /**
  * This class represents a bridge between two islands.
  * It also calculates the distance between the islands, which is the length of the bridge
+ *
+ * DO NOT MODIFY THIS CLASS
+ *
+ * @author Max Rönnow
  */
-import java.util.Objects;
 
 public class Bridge {
     private final Island island1;

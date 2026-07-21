@@ -1,6 +1,10 @@
 /**
  * This class represents an archipelago, i.e. a collection of islands.
  * It also keeps track of the bridges built
+ *
+ * DO NOT MODIFY THIS CLASS
+ *
+ * @author Max Rönnow
  */
 
 import java.util.ArrayList;

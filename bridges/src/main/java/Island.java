@@ -1,7 +1,12 @@
 /**
-A class representing an island.
-Simply contains the x and y coordinates for the island and a boolean for visited status
+ * A class representing an island.
+ * Simply contains the x and y coordinates for the island and a boolean for visited status
+ *
+ * DO NOT MODIFY THIS CLASS
+ *
+ * @author Max Rönnow
  */
+
 import java.util.Objects;
 
 public class Island {

@@ -2,7 +2,9 @@
  * This class is responsible to draw the window displaying the islands and bridges,
  * as well as drawing the islands and bridges.
  *
- * DO NOT MODIFY
+ * DO NOT MODIFY THIS CLASS
+ *
+ * @author Max Rönnow
  */
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ public class Graphics extends JFrame {
     IslandPanel islandPanel;
 
     public Graphics(Archipelago a, Traveler t) {
+
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Bridges");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,19 +30,17 @@ public class Graphics extends JFrame {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
+            // Start a Swing Timer to poll the archipelago and repaint periodically.
+            new javax.swing.Timer(50, e -> {
+                if (islandPanel != null) {
+                    islandPanel.repaint();
+                }
+            }).start();
+
         });
+
     }
 
-    /**
-     * Refreshes the window, draws newly added bridges.
-     */
-    public void drawBridge() {
-        SwingUtilities.invokeLater(() -> {
-            if (islandPanel != null) {
-                islandPanel.repaint();
-            }
-        });
-    }
 
     /**
      * Draws an island to the screen
