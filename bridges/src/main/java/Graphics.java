@@ -13,8 +13,10 @@ import java.awt.*;
 public class Graphics extends JFrame {
 
     /// Width and height of the window
-    private static final int WIDTH = 1920;
-    private static final int HEIGHT = 1080;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 800;
+
+    private static final float MULTIPLIER = 7f;
 
     IslandPanel islandPanel;
 
@@ -31,7 +33,7 @@ public class Graphics extends JFrame {
             frame.setVisible(true);
 
             // Start a Swing Timer to poll the archipelago and repaint periodically.
-            new javax.swing.Timer(50, e -> {
+            new javax.swing.Timer(20, e -> {
                 if (islandPanel != null) {
                     islandPanel.repaint();
                 }
@@ -50,7 +52,7 @@ public class Graphics extends JFrame {
      */
     public static void drawIsland(java.awt.Graphics2D g, Island island, Color color) {
         g.setColor(color);
-        g.fillOval((int) island.getX() - 3, (int) island.getY() - 3, 6, 6);
+        g.fillOval((int) ((island.getX() * MULTIPLIER) - 3), (int) ((island.getY() * MULTIPLIER) - 3), 6, 6);
         g.setColor(Color.WHITE);
     }
 
@@ -86,10 +88,10 @@ public class Graphics extends JFrame {
 
             for (Bridge b: new java.util.ArrayList<>(archipelago.getBridges())) {
                 if (b == null) continue;
-                int x1 = (int) b.getIsland1().getX();
-                int y1 = (int) b.getIsland1().getY();
-                int x2 = (int) b.getIsland2().getX();
-                int y2 = (int) b.getIsland2().getY();
+                int x1 = (int) (b.getIsland1().getX() * MULTIPLIER);
+                int y1 = (int) (b.getIsland1().getY() * MULTIPLIER);
+                int x2 = (int) (b.getIsland2().getX() * MULTIPLIER);
+                int y2 = (int) (b.getIsland2().getY() * MULTIPLIER);
 
                 if (b.getIsland1().isPartOfPath() && b.getIsland2().isPartOfPath()) {
                     g.setColor(Color.GREEN);
